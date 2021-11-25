@@ -1,0 +1,871 @@
+A. Preparation of Lab Environment
+
+1. Pastikan IP, Gateway, DNS Resolver, & Hostname sudah benar (contohnya IP, ubah IP sesuai dengan IP pada lab anda).
+
+a. Node pod-[username]-node01
+
+IP Address : 10.X.X.10/24
+Gateway : 10.X.X.1
+Hostname : pod-[username]-node01
+
+b. Node pod-[username]-node02
+
+IP Address : 10.X.X.20/24
+Gateway : 10.X.X.1
+Hostname : pod-[username]-node02
+
+Execute on pod-[username]-node01
+
+2. Ubah hostname
+
+root@docker-lab:~# echo 'pod-username-node01' > /etc/hostname
+root@docker-lab:~# hostname pod-username-node01
+root@docker-lab:~# exit
+
+3. Buat SSH key dan masukan public key ke file authorized_keys pada node pod-[username]-node01. Masukan public key pada file authorized_keys di node pod-[username]-node02 juga.
+
+a. Generate an SSH key.
+root@pod-username-node01:~# ssh-keygen
+root@pod-username-node01:~# cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+1fVCjBbUz7E6kJWGzfEFwrZQ0iACw4/Xz/8c221vAlUOjdqTv70nKOQc+Y87MP730KIvZSJQ7Km9vTK+7TV/0uuPDqXVST5kUmHyNRm+fDjaBcbq/Zd+UPOXHUtNM1bxt6N9REvIzKm/wfAkAgt6Y+x0goa209iS8rCXOItyBRH7gw9Mhhlo6d82Nb4DGg56JYwE9NV6duY60yLPb+PqKKQ5qCgkqc7D278eMJMDQ99Ld0Dgc+1xP4JgbOVKI69AZbzFPPosAW7JFa1q2t6D2tZL4P80m6EPsnzJGA1CUY9sGuByTAVduUxT5p+IzgFiKXuIanUAxkM4WU9SrIGR7XPKwkSf4BFY7XcH3/iR0VSPp/+hBcN8u7PY28ysA5+KGTopxYFcEzaaUc4PqxIkJnat0XfH22/lJMFF/vqkmS8rxs/ZMUF0QFzsGFba5MQR3Q1GwSUMvlAQqv0u0RfBOooAv6c+uAtRjB6XW/Ow6JDhIf3oXiEFqAReVybyOCM= root@pod-username-node01
+
+b. Masukan public key ke file authorized_keys pada node pod-[username]-node01.
+root@pod-username-node01:~# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+c. Masukan public key dari node pod-[username]-node01 ke file authorized_keys pada node pod-[username]-node02.
+root@pod-username-node02:~# vi ~/.ssh/authorized_keys
+... output omitted ...
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+1fVCjBbUz7E6kJWGzfEFwrZQ0iACw4/Xz/8c221vAlUOjdqTv70nKOQc+Y87MP730KIvZSJQ7Km9vTK+7TV/0uuPDqXVST5kUmHyNRm+fDjaBcbq/Zd+UPOXHUtNM1bxt6N9REvIzKm/wfAkAgt6Y+x0goa209iS8rCXOItyBRH7gw9Mhhlo6d82Nb4DGg56JYwE9NV6duY60yLPb+PqKKQ5qCgkqc7D278eMJMDQ99Ld0Dgc+1xP4JgbOVKI69AZbzFPPosAW7JFa1q2t6D2tZL4P80m6EPsnzJGA1CUY9sGuByTAVduUxT5p+IzgFiKXuIanUAxkM4WU9SrIGR7XPKwkSf4BFY7XcH3/iR0VSPp/+hBcN8u7PY28ysA5+KGTopxYFcEzaaUc4PqxIkJnat0XfH22/lJMFF/vqkmS8rxs/ZMUF0QFzsGFba5MQR3Q1GwSUMvlAQqv0u0RfBOooAv6c+uAtRjB6XW/Ow6JDhIf3oXiEFqAReVybyOCM= root@pod-username-node01
+
+4. Cek apakah host dapat mengakses tanpa menggunakan password (passwordless).
+
+a. Akses ssh node pod-[username]-node01.
+root@pod-username-node01:~# ssh 10.X.X.10
+b. Akses ssh node pod-[username]-node02.
+root@pod-username-node01:~# ssh 10.X.X.20
+
+Eksekusi pada pod-[username]-node02
+
+5. Ubah hostname
+
+root@docker-lab:~# echo 'pod-username-node02' > /etc/hostname
+root@docker-lab:~# hostname pod-username-node02
+root@docker-lab:~# exit
+
+6. Buat SSH key dan masukan public key ke file authorized_keys pada node pod-[username]-node02. Masukan public key pada file authorized_keys pada node pod-[username]-node01 juga.
+
+a. Generate an SSH key.
+root@pod-username-node02:~# ssh-keygen
+root@pod-username-node02:~# cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYFD929XkulrBijod4lpLZthAnnvSift7ZNCFT5R+VSf9APlu8MpHnb8dzXpzIN0jYLAJvSQ0Q+aavpFrJSGIAq0q2XhxryPUZyAHkEx9h0fltxDnxxOhDd8ImIJkcn3OEtrfNu+afsvH3wecVdyInk6tKNgJ1C/RXaEqAiY1QRIHqlkx6oJqWUk7GYW9XWr+3PnzwJ8G+VMW5jzo47wX6jFrG7+SbYCCp4AEX4P7/4R8T96FUowotlKWRcBYezupIjBbC+F2BmHd4ZJR/Z5oRJXU0Fgo/zbm2gFuZeFIdUWduJIC58r13F/H88IgM/ZK5i7nuMnALrU3lwASfqXUNtlx92xcuwuSIgUEfbXy235OeYY6hOGyS32LboyphiZxf+t86xqRlzLchpbm54egxQfS7txu3m80Xc+LDSFQ6qghTlcd5iQ/Ep1eTVAT49ZSVWLqr5+7WGoxNZixGDL3t9YNsM74uYU2sN25qi5cp1ETj/liyCHB9WUDZi0mMhIs= root@pod-username-node02
+b. Masukan public key ke file authorized_keys pada node pod-[username]-node02.
+root@pod-username-node02:~# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+c. Masukan public key dari node pod-[username]-node02 ke file authorized_keys pada node pod-[username]-node01.
+root@pod-username-node01:~# vi ~/.ssh/authorized_keys
+... output omitted ...
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYFD929XkulrBijod4lpLZthAnnvSift7ZNCFT5R+VSf9APlu8MpHnb8dzXpzIN0jYLAJvSQ0Q+aavpFrJSGIAq0q2XhxryPUZyAHkEx9h0fltxDnxxOhDd8ImIJkcn3OEtrfNu+afsvH3wecVdyInk6tKNgJ1C/RXaEqAiY1QRIHqlkx6oJqWUk7GYW9XWr+3PnzwJ8G+VMW5jzo47wX6jFrG7+SbYCCp4AEX4P7/4R8T96FUowotlKWRcBYezupIjBbC+F2BmHd4ZJR/Z5oRJXU0Fgo/zbm2gFuZeFIdUWduJIC58r13F/H88IgM/ZK5i7nuMnALrU3lwASfqXUNtlx92xcuwuSIgUEfbXy235OeYY6hOGyS32LboyphiZxf+t86xqRlzLchpbm54egxQfS7txu3m80Xc+LDSFQ6qghTlcd5iQ/Ep1eTVAT49ZSVWLqr5+7WGoxNZixGDL3t9YNsM74uYU2sN25qi5cp1ETj/liyCHB9WUDZi0mMhIs= root@pod-username-node02
+
+7. Cek apakah host dapat mengakses tanpa menggunakan password (passwordless).
+
+a. Akses ssh node pod-[username]-node02.
+root@pod-username-node01:~# ssh 10.X.X.20
+b. Akses ssh node pod-[username]-node01.
+root@pod-username-node01:~# ssh 10.X.X.10
+
+Eksekusi pada pod-[username]-node01 & pod-[username]-node02
+
+8. Edit name resolution.
+
+sudo vim /etc/hosts
+.....
+10.X.X.10 pod-username-node01
+10.X.X.20 pod-username-node02
+.....
+
+9. Periksa konektivitas.
+
+ping -c 3 google.com
+ping -c 3 detik.com
+ping -c 3 10.X.X.10
+ping -c 3 10.X.X.20
+hostname
+
+B. Installing Docker
+
+1. Buat user baru dengan nama sesuai dengan username di platform ADINUSA.
+
+useradd -m <username> -s /bin/bash
+echo '<username> ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/<username>
+
+2. Install Docker.
+
+apt -y update 
+apt -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+apt-key fingerprint 0EBFCD88
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt -y update
+apt -y install docker-ce docker-ce-cli containerd.io
+systemctl status docker
+
+3. Menampilkan versi docker.
+
+docker version
+
+4. Menampilkan detil instalasi docker.
+
+docker info
+
+5. Uji instalasi docker.
+
+docker run hello-world
+
+6. Menampilkan image yang sudah di-download.
+
+docker image ls
+
+7. Menampilkan semua container (active ataupun exit).
+
+docker container ls -a
+
+8. Menambahkan user ke dalam group docker.
+
+groupadd docker
+su - <username>
+sudo usermod -aG docker $USER
+
+C. Docker Run - Part 1
+
+1. Check image redis
+
+docker search redis
+
+2. Menjalankan image redis
+
+docker run redis  # CTRL + c untuk keluar
+docker run -d redis  # Berjalan di belakang layar (Background)
+docker run -d --name redis1 redis # Memberi nama pada container
+
+3. Menampilkan container yang berjalan.
+
+docker ps 
+docker container ls
+
+4. Menampilkan semua container docker.
+
+docker ps -a
+docker container ls -a
+
+5. Menampilkan deskripsi container .
+
+docker inspect CONTAINER_NAME/CONTAINER_ID
+docker inspect redis1
+
+6. Menampilkan isi logs dari container.
+
+docker logs CONTAINER_NAME/CONTAINER_ID
+docker logs redis1
+
+7. Menampilkan live stream resource yang terpakai pada container.
+
+docker stats CONTAINER_NAME/CONTAINER_ID
+docker stats redis1
+
+8. Menampilkan running process pada container.
+
+docker top CONTAINER_NAME/CONTAINER_ID
+docker top redis1
+
+9. Mematikan container.
+
+docker stop CONTAINER_NAME/CONTAINER_ID
+docker stop redis1
+
+a. docker run (latihan02)
+1. Check image nginx.
+
+docker search nginx
+2. Menjalankan image nginx dan mengexpose port host.
+
+docker run -d --name nginx1 -p 80:80 nginx:latest
+3. Menampilkan deskripsi container nginx.
+
+docker inspect nginx1
+4. Menjalankan image nginx dan mendeklarasikan port container.
+
+docker run -d --name nginx2 -p 80 nginx:latest
+5. Uji browsing.
+
+curl localhost:$(docker port nginx2 80| cut -d : -f 2)
+6. Menampilkan container (activate/exit).
+
+docker ps -a 
+docker container ls -a
+7. Menampilkan docker image.
+
+docker images
+
+D. Docker Run - Part 2
+
+a. docker run (latihan03)
+1. Check image nginx.
+
+docker search nginx
+2. Menjalankan image nginx dan mengexpose port.
+
+docker run -d --name nginx1 -p 8080:80 nginx:latest
+3. Menampilkan deskripsi container nginx.
+
+docker inspect nginx1
+4. Menjalankan image nginx dan mengexpose port.
+
+docker run -d --name nginx2 -p 8081:80 nginx:latest
+5. Menampilkan container (activate/exit).
+
+docker ps -a 
+docker container ls -a
+6. Check access pada container.
+
+curl localhost:8080
+curl localhost:8081
+7. Masuk ke dalam container.
+
+docker exec -it nginx2 /bin/bash
+8. Update dan install editor pada container.
+
+apt-get update -y && apt-get install nano -y
+9. Edit pada index.html dan ubah pada welcome to nginx.
+
+nano index.html
+...
+hello, testing.
+...
+
+mv index.html /usr/share/nginx/html
+10. Restart service nginx.
+
+service nginx restart
+11. Menjalankan ulang container.
+
+docker start nginx2
+12. Menampilkan container.
+
+docker ps
+docker container ls
+13. Check access pada container.
+
+curl localhost:8080
+curl localhost:8081
+14. Menampilkan deskripsi container .
+
+docker inspect nginx1
+docker inspect nginx2
+15. Menampilkan isi logs dari container.
+
+docker logs nginx1
+docker logs nginx2
+16. Menampilkan live stream resource yang terpakai pada container.
+
+docker stats nginx1
+docker stats nginx2
+17. Menampilkan running process pada container.
+
+docker top nginx1
+docker top nginx2
+
+b. docker run (latihan04)
+1. Check image ubuntu.
+
+docker search ubuntu
+2. Mengambil image ubuntu.
+
+docker pull ubuntu
+3. Menjalankan container dan langsung menuju consolenya.
+
+docker run -it --name ubuntu1 ubuntu
+
+keluar dari container dengan Ctrl+d atau exit 
+
+docker ps -a
+4. Menjalankan container dan langsung dihapus.
+
+docker run -it --rm --name ubuntu2 ubuntu
+
+keluar dari container dengan Ctrl+d atau exit 
+
+docker ps -a
+
+E. Docker Run - Part 3
+
+a. docker run (latihan05)
+1. Menjalankan container mysql.
+
+docker run -d --name my-own-mysql -e MYSQL_ROOT_PASSWORD=RAHASIA -e MYSQL_DATABASE=latihan05 -p 3306:3306 mysql
+2. Pull image phpmyadmin.
+
+docker pull phpmyadmin/phpmyadmin:latest
+3. Menjalankan container phpmyadmin dan menghubungkannya dengan container mysql.
+
+docker run --name my-own-phpmyadmin -d --link my-own-mysql:db -p 8090:80 phpmyadmin/phpmyadmin
+4. Uji browsing.
+
+ssh root@lab5.btech.id -p10XX1 -DYYYY
+buka dibrowser http://10.X.X.10:8090 kemudian login dengan user: `root` dan password: `RAHASIA` 
+
+b. docker run (latihan06)
+1. Jalankan container ubuntu.
+
+docker run -dit --name ubuntu1 ubuntu
+docker run -dit --name ubuntu2 ubuntu
+2. Menampilkan daftar container.
+
+docker ps
+3. Pause container ubuntu.
+
+docker pause ubuntu1
+docker pause ubuntu2
+4. Check pada daftar container jika status container sudah menjadi pause.
+
+docker ps
+5. Check pemakaian resource pada saat container ubuntu dalam keadaan pause.
+
+docker stats ubuntu1
+docker stats ubuntu2
+6. Unpause container ubuntu1.
+
+docker unpause ubuntu1
+
+c. docker run (latihan07)
+
+1. Membuat container database.
+
+docker container run -d --name ch6_mariadb --memory 256m --cpu-shares 1024 --cap-drop net_raw -e MYSQL_ROOT_PASSWORD=test mariadb:5.5
+2. Membuat container wordpress.
+
+docker container run -d -p 80:80 -P --name ch6_wordpress  --memory 512m --cpu-shares 512 \
+--cap-drop net_raw --link ch6_mariadb:mysql -e WORDPRESS_DB_PASSWORD=test wordpress:5.0.0-php7.2-apache
+3. Check logs, running process, and resource.
+
+docker logs ch6_mariadb
+docker logs ch6_wordpress
+
+docker top ch6_mariadb
+docker top ch6_wordpress
+
+docker stats ch6_mariadb
+docker stats ch6_wordpress
+4. Uji browsing.
+
+buka di browser http://10.X.X.10 kemudian selesaikan tahap instalasinya.
+
+F. Mount Volume
+
+1. membuat working directory.
+
+cd $HOME
+mkdir -p latihan/latihan01-volume
+cd latihan/latihan01-volume
+2. membuat container untuk data volume dengan nama test-volume.
+
+for i in {1..10};do touch file-$i;done
+sudo docker create -v /test-volume --name test-volume busybox
+sudo docker cp . test-volume:/test-volume 
+3. mount volumes.
+
+sudo docker run --volumes-from test-volume ubuntu ls /test-volume
+
+G. Mount Volume with NFS Server
+
+1. Membuat Direktori
+
+mkdir -p /data/nfs-storage01/
+2. Create the NFS Server with docker.
+
+docker run -itd --privileged --restart unless-stopped -e SHARED_DIRECTORY=/data -v /data/nfs-storage01:/data -p 2049:2049 itsthenetwork/nfs-server-alpine:12
+
+3. Mounting volume di client NFS.
+
+ssh 10.x.x.20 -l root
+sudo apt install nfs-client -y
+sudo mount -v -o vers=4,loud 10.x.x.10:/ /mnt
+atau
+sudo mount -v -t nfs4 10.x.x.10:/ /mnt
+df -h
+
+touch /mnt/file1.txt
+touch /mnt/file2.txt
+exit
+Eksekusi di node pod-[username]-node01
+4. Verifikasi.
+
+ls /data/nfs-storage01/
+
+H. Mount Volume with Read-only Mode
+
+1. Membuat volume
+
+docker volume create my-vol
+2. Menampilkan daftar volume.
+
+docker volume ls
+3. Menampilkan detil volume
+
+docker volume inspect my-vol
+4. Jalankan container dengan volume
+
+docker run -d --name=nginx-test -v my-vol:/usr/share/nginx/html -p 4005:80 nginx:latest
+5. Tampilkan alamat IP container
+
+docker inspect nginx-test | grep -i ipaddress
+6. Uji browsing ke alamat IP container.
+
+curl http://172.17.XXX.XXX
+7. Buat file index.html dan pindahkan ke direktori source volume
+
+sudo echo "This is from my-vol source directory" > index.html
+sudo mv index.html /var/lib/docker/volumes/my-vol/_data
+8. Uji browsing ke alamat IP container.
+
+curl http://172.17.XXX.XXX
+9. Jalankan container dengan read-only volume
+
+docker run -d --name=nginxtest-rovol -v my-vol:/usr/share/nginx/html:ro nginx:latest
+10. Tampilkan detil container nginxtest-rovol dan perhatikan Mode di section Mounts
+
+docker inspect nginxtest-rovol
+
+I. Volume Driver
+
+1. Buat folder /share dan tambahkan index.html.
+
+sudo mkdir /share
+sudo chmod 777 /share
+echo "Hello World!" > /share/index.html
+Eksekusi di node pod-[username]-node01
+2. Instal plugin sshfs.
+
+sudo docker plugin install --grant-all-permissions vieux/sshfs
+sudo docker plugin ls
+sudo docker plugin disable [PLUGIN ID]
+sudo docker plugin set vieux/sshfs sshkey.source=/root/.ssh/
+sudo docker plugin enable [PLUGIN ID]
+sudo docker plugin ls
+3. Membuat volume dengan driver sshfs.
+
+sudo docker volume create --driver vieux/sshfs -o sshcmd=root@10.X.X.20:/share  -o allow_other sshvolume
+4. Uji jalankan container dengan volume.
+
+sudo docker run -d --name=nginxtest-ssh -p 8090:80 -v sshvolume:/usr/share/nginx/html nginx:latest
+5. Uji browsing.
+
+sudo docker ps
+curl http://localhost:8090
+
+J. Default Bridge Network
+
+1. Tampilkan daftar network saat ini.
+
+sudo docker network ls
+2. Jalankan 2 container alpine yang menjalankan shell ash.
+
+docker run -dit --name alpine1 alpine ash
+docker run -dit --name alpine2 alpine ash
+docker container ls
+3. Buat network baru dan tambahkan ke container.
+
+docker network create --driver bridge bridge1
+docker network connect bridge1 alpine1
+4. cek ip container alpine2.
+
+docker inspect alpine2  | grep -i ipaddress
+5. Masuk ke container alpine1.
+
+docker exec -it alpine1 sh
+6. Tampilkan alamat IP container alpine1.
+
+ip add
+7. Uji ping ke internet (sukses).
+
+ping -c 3 8.8.8.8
+8. Uji ping ke alamat IP container alpine2 (sukses).
+
+ping -c 3 172.17.YYY.YYY
+Uji ping ke nama container alpine2 (gagal).
+ping -c 3 alpine2
+10. Keluar dari container alpine1 tanpa menutup shell tekan Ctrl+P, Ctrl+Q.
+
+K. Host Network
+
+1. Jalankan container dari image nginx.
+
+sudo docker run -itd --network host --name my_nginx nginx
+2. Uji browsing ke localhost.
+
+curl http://localhost
+3. Verifikasi alamat IP dan bound port 80.
+
+ip add
+sudo netstat -tulpn | grep :80
+
+L. Exploring Dockerfile
+
+1. Clone repository latihan.
+
+git clone https://github.com/spkane/docker-node-hello.git \
+    --config core.autocrlf=input latihan01
+2. Masuk ke dalam direktori.
+
+cd latihan01
+3. Buat image.
+
+docker build -t node-latihan01 .
+4. Buat container.
+
+docker run -d --rm --name node-latihan01 -p 8080:8080 node-latihan01
+5. Coba akses port.
+
+curl localhost:8080
+
+a. Dockerfile (latihan02)
+1. Buat direktori latihan02.
+
+cd $HOME
+mkdir latihan02
+cd latihan02
+2. Buat file Dockerfile.
+
+vim Dockerfile
+...
+# Use whalesay image as a base image
+FROM docker/whalesay:latest
+
+# Install fortunes
+RUN apt -y update && apt install -y fortunes
+
+# Execute command
+CMD /usr/games/fortune -a | cowsay
+...
+3. Bangun image dari Dockerfile.
+
+docker build -t docker-whale .
+4. Tampilkan image yang sudah dibangun.
+
+docker image ls
+5. Uji jalankan image.
+
+docker run docker-whale
+6. Menampilkan container.
+
+docker ps
+docker container ls -a
+
+M. Exploring Dockerfile (Flask Apps)
+
+a. Dockerfile (latihan03)
+1. Jika belum punya Docker ID, register di https://id.docker.com.
+
+2. Login dengan Docker ID.
+
+sudo docker login
+3. Buat direktori latihan03.
+
+cd $HOME
+mkdir latihan03
+cd latihan03
+4. Membuat file flask.
+
+vim app.py
+...
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hey, we have Flask in a Docker container!'
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
+...
+5. Membuat requirements.txt.
+
+vi requirements.txt
+...
+Flask==0.10.1
+Werkzeug==1.0.0
+Jinja2==2.8.1
+MarkupSafe==1.1.1
+itsdangerous==1.1.0
+...
+6. Membuat file Dockerfilenya.
+
+vim Dockerfile
+...
+FROM ubuntu:16.04
+RUN mkdir /app
+RUN apt-get update -y && \
+        apt-get install python-pip python-dev -y
+
+COPY ./requirements.txt /app
+COPY . /app
+
+WORKDIR /app
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+...
+7. Buat image dari Dockerfile.
+
+docker build -t flask-latihan03 .
+8. Tag image.
+
+sudo docker tag flask-latihan03 [username]/flask-latihan03:latest
+9. Push image.
+
+sudo docker push [username]/flask-latihan03:latest
+10. Menjalankan image .
+
+sudo docker run -d -p 5000:5000 --name flask03 [username]/flask-latihan03
+11. Uji browsing.
+
+curl localhost:5000
+
+N. Exploring Dockerfile (Quiz)
+
+1. Buat direktori latihan-quiz01. Kemudian, masuk ke direktori.
+
+2. Clone repository dari https://github.com/rivawahyuda/mywebsite.git
+
+3. Buat Dockerfile dengan ketentuan: - dari image: nginx:latest
+
+4. Build image dengan nama latihan-quiz01-image.
+
+5. Run container dengan image latihan-quiz01-image, expose port 80, dan beri nama quiz01.
+
+6. Uji browsing.
+
+O. Using Docker Compose
+
+Install Compose
+1. Unduh Compose.
+
+sudo apt install -y docker-compose
+2. Uji instalasi.
+
+sudo docker-compose --version
+Eksekusi di pod-[username]-node01
+3. Buat direktori my_wordpress dan masuk ke direktori tersebut.
+
+cd $HOME
+mkdir -p latihan/my_wordpress
+cd latihan/my_wordpress
+4. Buat file docker-compose.yml.
+
+vim docker-compose.yml
+version: '3.2'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - dbdata:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: [username]
+       MYSQL_PASSWORD: [password]
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:latest
+     ports:
+       - "8000:80"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: [username]
+       WORDPRESS_DB_PASSWORD: [password]
+volumes:
+    dbdata:
+5. Jalankan compose.
+
+sudo docker-compose up -d
+6. Tampilkan daftar container dan uji browsing ke ke halaman wordpress yang sudah dibuat.
+
+sudo docker container ls
+
+P. Log Check
+
+1. Check history image.
+
+docker history nginx:latest
+2. Jalankan nginx.
+
+docker run -dit -p 80:80 --name nginx1 nginx
+3. Check Filesystem pada nginx.
+
+docker diff nginx1
+4. Cek Log.
+
+docker logs --details nginx1
+docker logs --timestamps nginx1
+docker logs nginx1
+
+Q. Configuring Logging Driver
+
+1. Buat file daemon.json.
+
+vim /etc/docker/daemon.json
+...
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "100"
+  }
+}
+...
+2. Restart Daemon dan Docker.
+
+systemctl daemon-reload
+systemctl restart docker
+3. Jalankan container.
+
+docker run --log-driver json-file --log-opt max-size=10m alpine echo hello world   
+4. Check log pada direktori docker.
+
+cat /var/lib/docker/containers/CONTAINER/xxx-json.log
+Note: Untuk ID-nya bisa dilihat dari perintah docker ps -a.
+
+R. Health Check
+
+a. Health Check latihan01
+1. Buat direktori.
+
+cd $HOME
+mkdir hc-latihan01
+cd hc-latihan01
+2. Buat file Dockerfile.
+
+vim Dockerfile
+...
+FROM katacoda/docker-http-server:health
+HEALTHCHECK --interval=1s --retries=3 \
+    CMD curl --fail http://localhost:80/ || exit 1
+...
+3. Buat image.
+
+docker build -t http-healthcheck .
+4. Jalankan image.
+
+docker run -d -p 80:80 --name http-healthcheck http-healthcheck
+5. Check image.
+
+docker ps
+# check pada bagian status
+6. check dengan curl.
+
+curl http://localhost/
+# maka dapat diakses
+7. Check untuk di unhealthy.
+
+curl http://localhost/unhealthy
+8. Check pada docker container status.
+
+docker container ls
+9. Check dengan curl.
+
+curl http://localhost/
+
+b. Health Check latihan02
+1. Buat direktori baru.
+
+cd $HOME
+mkdir hc-latihan02
+cd hc-latihan02
+2. Buat file server.js.
+
+vim server.js
+...
+"use strict";
+const http = require('http');
+
+function createServer () {
+    return http.createServer(function (req, res) {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end('OK\n');
+    }).listen(8080);
+}
+
+let server = createServer();
+
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    if (server) {
+        server.close();
+        server = null;
+        res.end('Shutting down...\n');
+    } else {
+        server = createServer();
+        res.end('Starting up...\n');
+    }
+}).listen(8081);
+...
+3. Buat file Dockerfile.
+
+vim Dockerfile
+...
+FROM node
+COPY server.js /
+EXPOSE 8080 8081
+HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl -sS 127.0.0.1:8080 || exit 1
+CMD ["node","server.js"]
+...
+4. Buat image.
+
+docker build -t node-server .
+5. Jalankan image.
+
+docker run -d --name nodeserver -p 8080:8080 -p 8081:8081 node-server
+6. Check container.
+
+curl 127.0.0.1:8080
+docker ps 
+docker inspect --format "{{ json .State.Health }}" nodeserver 
+7. Check container.
+
+curl 127.0.0.1:8081
+docker ps 
+docker inspect --format "{{ json .State.Health }}" nodeserver 
+8. Check Container.
+
+curl 127.0.0.1:8081
+docker ps
+docker inspect --format "{{ json .State.Health }}" nodeserver
+
+T. Configuring Storage Driver
+
+1. Edit file daemon.json.
+
+vim /etc/docker/daemon.json
+...
+{
+  "storage-driver": "vfs"
+}
+...
+2. Restart service docker.
+
+sudo service docker restart
+3. Check pada docker info.
+
+docker info
+4. Check dengan docker pull.
+
+docker pull ubuntu
+5. Check pada direktori docker.
+
+ls -al /var/lib/docker/vfs/dir/
+du -sh /var/lib/docker/vfs/dir/
