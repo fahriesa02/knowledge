@@ -1,0 +1,2291 @@
+A. CONFIGURING SSH KEY-BASED AUTHENTICATION
+
+1. Use the ssh-keygen command to generate SSH keys. Do not enter a passphrase.
+
+[student@servera ~]$ ssh-keygen
+
+2. Use the ssh-copy-id command to send the public key of the SSH key pair to adinusa on lab5.btech.id port 2279. Use AdinusaKeren as the password of user adinusa on lab5.btech.id.
+
+[student@servera ~]$ ssh-copy-id adinusa@lab5.btech.id -p 2279
+
+3. Execute the cat .ssh/authorized_keys command on lab5.btech.id remotely using SSH without accessing the remote interactive shell.
+
+[student@servera ~]$ ssh adinusa@lab5.btech.id -p 2279 "cat .ssh/authorized_keys"
+...
+workstation.lab.example.com
+
+4. Execute the hostname command on lab5.btech.id remotely using SSH without accessing the remote interactive shell.
+
+[student@servera ~]$ ssh adinusa@lab5.btech.id -p 2279 hostname
+workstation.lab.example.com
+
+B. MANAGING FILES USING COMMAND- LINE TOOLS
+
+1. In the student user's home directory, use the mkdir command to create three subdirectories: Music, Pictures, and Videos.
+
+[student@servera ~]$ mkdir Music Pictures Videos
+
+2. Continuing in the student user's home directory, use the touch command to create sets of empty practice files to use during this lab.
+
+Create six files with names of the form songX.mp3.
+Create six files with names of the form snapX.jpg.
+Create six files with names of the form filmX.avi.
+In each set, replace X with the numbers 1 through 6.
+
+[student@servera ~]$ touch song1.mp3 song2.mp3 song3.mp3 song4.mp3 \ 
+song5.mp3 song6.mp3 
+[student@servera ~]$ touch snap1.jpg snap2.jpg snap3.jpg snap4.jpg \ 
+snap5.jpg snap6.jpg 
+[student@servera ~]$ touch film1.avi film2.avi film3.avi film4.avi \
+film5.avi film6.avi
+[student@servera ~]$ ls -l
+
+3. Continuing in the student user's home directory, move the song files to the Music subdirectory, the snapshot files to the Pictures subdirectory, and the movie files to the Videos subdirectory.
+
+When distributing files from one location to many locations, first change to the directory containing the source files. Use the simplest path syntax, absolute or relative, to reach the destination for each file management task.
+
+[student@servera ~]$ mv song1.mp3 song2.mp3 song3.mp3 song4.mp3 \ 
+song5.mp3 song6.mp3 Music 
+[student@servera ~]$ mv snap1.jpg snap2.jpg snap3.jpg snap4.jpg \ 
+snap5.jpg snap6.jpg Pictures 
+[student@servera ~]$ mv film1.avi film2.avi film3.avi film4.avi \ 
+film5.avi film6.avi Videos 
+[student@servera ~]$ ls -l Music Pictures Videos
+
+4. Continuing in the student user's home directory, create three subdirectories for organizing your files into projects. Name the subdirectories friends, family, and work. Use a single command to create all three subdirectories at the same time. You will use these directories to rearrange your files into projects.
+
+[student@servera ~]$ mkdir friends family work 
+[student@servera ~]$ ls -l
+
+5. Copy a selection of new files to the project directories family and friends. Use as many commands as needed. You do not have to use only one command as in the example. For each project, first change to the project directory, then copy the source files to this directory. Keep in mind that you are making copies, therefore the original files will remain in their original locations after the files are copied to the project directories.
+
+a. Copy files (all types) containing the numbers 1 and 2 in to the friends subdirectory.
+b. Copy files (all types) containing the numbers 3 and 4 in to the family subdirectory.
+When copying files from multiple locations into a single location, Red Hat recommends that you change to the destination directory prior to copying the files. Use the simplest path syntax, absolute or relative, to reach the source for each file management task.
+[student@servera ~]$ cd friends 
+[student@servera friends]$ cp ~/Music/song1.mp3 ~/Music/song2.mp3 \ 
+~/Pictures/snap1.jpg ~/Pictures/snap2.jpg ~/Videos/film1.avi \ 
+~/Videos/film2.avi . 
+[student@servera friends]$ ls -l
+[student@servera friends]$ cd ../family
+[student@servera family]$ cp ~/Music/song3.mp3 ~/Music/song4.mp3 \
+~/Pictures/snap3.jpg ~/Pictures/snap4.jpg ~/Videos/film3.avi \
+~/Videos/film4.avi .
+[student@servera family]$ ls -l
+
+6. For your work project, create additional copies.
+
+[student@servera family]$ cd ../work
+[student@servera work]$ cp ~/Music/song5.mp3 ~/Music/song6.mp3 \
+~/Pictures/snap5.jpg ~/Pictures/snap6.jpg \
+~/Videos/film5.avi ~/Videos/film6.avi .
+[student@servera work]$ cd 
+[student@servera ~]$ ls -R
+
+7. Your project tasks are now complete, and it is time to clean up the projects. Change to the student user's home directory. Attempt to delete both the family and friends project directories with a single rmdir command.
+
+[student@servera ~]$ rmdir family friends
+Using the rmdir command should fail because both subdirectories contain files. 11. Use the rm -r command to recursively delete both the family and friends subdirectories and their contents.
+
+[student@servera ~]$ rm -rf family friends
+[student@servera ~]$ ls -l
+
+8. Delete all the files in the work project, but do not delete the work directory.
+
+[student@servera ~]$ cd work
+[student@servera work]$ rm -rf song5.mp3 song6.mp3 snap5.jpg snap6.jpg film5.avi film6.avi
+[student@servera work]$ ls -l
+
+9. Finally, from the student user's home directory, use the rmdir command to delete the work directory. The command should succeed now that it is empty.
+
+[student@servera work]$ cd
+[student@servera ~]$ rmdir work
+[student@servera ~]$ ls -l
+
+C. MAKING LINKS BETWEEN FILES
+
+1. Create a hard link named /home/student/backups/source.backup. Link it to the file, /home/student/files/source.file.
+
+[student@servera ~]$ ln /home/student/files/source.file \
+/home/student/backups/source.backup
+
+2. Verify the link count for the original /home/student/files/source.file and the new linked file, /home/student/backups/source.backup. The link count should be 2 for both files.
+
+[student@servera ~]$ ls -l /home/student/files/
+[student@servera ~]$ ls -l /home/student/backups/
+
+3. Create a soft link named /home/student/tempdir and link it to /tmp.
+
+[student@servera ~]$ ln -s /tmp /home/student/tempdir
+
+4. Use the ls -l command to verify the newly created soft link.
+
+[student@servera ~]$ ls -l /home/student/tempdir
+
+D. GAINING SUPERUSER ACCESS
+
+1. Switch to root using sudo, converting to the root user's shell environment.
+
+[student@servera ~] $ sudo su -
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Create the operator1 user and confirm that it exists in the system.
+
+[root@servera ~]# useradd operator1
+[root@servera ~]# tail /etc/passwd | grep operator1
+
+3. Set the password for operator1 to redhat.
+
+[root@servera ~]# passwd operator1
+Changing password for user operator1.
+New password: redhat
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: redhat
+passwd: all authentication tokens updated successfully.
+
+4. Switch to operator1 user, and try the sudo command, it should fail.
+
+[root@servera ~]# su - operator1
+[operator1@servera ~]$ id
+uid=5002(operator1) gid=5002(operator1) groups=5002(operator1) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+[operator1@servera ~]$ sudo su -
+[sudo] password for operator1: redhat
+operator1 is not in the sudoers file.  This incident will be reported.
+
+5. Create file operator1 in /etc/sudoers.d/ directory,
+
+[operator1@servera ~]$exit
+[root@servera ~]# vim /etc/sudoers.d/operator1
+with the following content
+
+operator1 ALL=(ALL) ALL
+
+6. verify that the file has been created, and take a screenshot, then name the screenshot with.
+
+[root@servera ~]# cat /etc/sudoers.d/operator1
+operator1 ALL=(ALL) ALL
+
+7. And Switch to operator1 user, try the sudo command, and take a screenshot, then name the screenshot with.
+
+[root@servera ~]# su - operator1
+[operator1@servera ~]$ sudo su -
+[sudo] password for operator1: redhat
+[root@servera ~]#
+
+E. MANAGING LOCAL USER ACCOUNTS
+
+1. Switch to root using sudo, converting to the root user's shell environment.
+
+[student@servera ~]$ sudo su -
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Create the operator2, operator3 user and confirm that it exists in the system.
+
+[root@servera ~]# useradd operator2
+[root@servera ~]# useradd operator3
+[root@servera ~]# tail /etc/passwd | grep operator
+
+3. Set the password for operator2 and operator3 to redhat.
+
+[root@servera ~]# passwd operator2
+Changing password for user operator2.
+New password: redhat
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: redhat
+passwd: all authentication tokens updated successfully.
+[root@servera ~]# passwd operator3
+Changing password for user operator3.
+New password: redhat
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: redhat
+passwd: all authentication tokens updated successfully.
+
+4. Update the operator2 and operator3 user accounts to include the Operator Two and Operator Three comments, respectively. Verify that the comments are successfully added.
+
+[root@servera ~]# usermod -c "Operator Two" operator2
+[root@servera ~]# usermod -c "Operator Three" operator3
+[root@servera ~]# tail /etc/passwd | grep operator
+
+5. Remove the operator3 user from the system. And Confirm that operator3 is successfully deleted.
+
+[root@servera ~]# userdel -r operator3
+[root@servera ~]# tail /etc/passwd | grep operator
+
+F. MANAGING LOCAL GROUP ACCOUNTS
+
+1. Switch to root using sudo, converting to the root user's shell environment.
+
+[student@servera ~]$ sudo su -
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Create the operators supplementary group with the GID of 30000.
+
+[root@servera ~]# groupadd -g 30000 operators
+
+3. Create admin as an additional supplementary group.
+
+[root@servera ~]# groupadd admin
+
+4. Verify that both the operators and admin supplementary groups exist.
+
+[root@servera ~]# tail /etc/group
+
+5. Add operator1, operator2 and operator3 user to operators. And Confirm that the users are successfully added to the group.
+
+[root@servera ~]# usermod -aG operators operator1
+[root@servera ~]# usermod -aG operators operator2
+[root@servera ~]# usermod -aG operators operator3
+[root@servera ~]# id operator1
+[root@servera ~]# id operator2
+[root@servera ~]# id operator3
+
+6. Add sysadmin1, sysadmin2 and sysadmin3 user to admin. And Confirm that the users are successfully added to the group.
+
+[root@servera ~]# usermod -aG admin sysadmin1
+[root@servera ~]# usermod -aG admin sysadmin2
+[root@servera ~]# usermod -aG admin sysadmin3
+[root@servera ~]# id sysadmin1
+[root@servera ~]# id sysadmin2
+[root@servera ~]# id sysadmin3
+
+7. Examine /etc/group to verify the supplemental group memberships.
+
+[root@servera ~]# tail /etc/group
+
+8. Create the /etc/sudoers.d/admin file such that the members of admin have full administrative privileges.
+
+[root@servera ~]# echo "%admin ALL=(ALL) ALL" >> /etc/sudoers.d/admin
+
+9. Switch to sysadmin1 (a member of admin) and verify that you can run a sudo command as sysadmin1.
+
+[root@servera ~]# su - sysadmin1
+[sysadmin1@servera ~]$ sudo cat /etc/sudoers.d/admin
+[sudo] password for sysadmin1: redhat
+%admin ALL=(ALL) ALL
+
+G. MANAGING USER PASSWORDS
+
+1. As student, lock the operator1 account using administrative rights.
+
+[student@servera ~]$ sudo usermod -L operator1
+[sudo] password for student: student
+
+2. Attempt to log in as operator1. This should fail.
+
+[student@servera ~]$ su - operator1
+Password: redhat
+su: Authentication failure
+
+3. Unlock the operator1 account, And Attempt to log in as operator1 again. This should succeed.
+
+[student@servera ~]$ sudo usermod -U operator1
+[student@servera ~]$ su - operator1
+Password: redhat
+[operator1@servera ~]$ exit
+
+4. Change the password policy for operator1 to require a new password every 90 days. Confirm that the password age is successfully set.
+
+[student@servera ~]$ sudo chage -M 90 operator1
+[student@servera ~]$ sudo chage -l operator1
+
+5. Force a password change on the first login for the operator1 account.
+
+[student@servera ~]$ sudo chage -d 0 operator1
+
+6. Try Log in as operator1 and change the password to forsooth123 when prompted.
+
+[student@servera ~]$ su - operator1
+Password: redhat
+You are required to change your password immediately (administrator
+enforced)
+Current password: redhat
+New password: forsooth123
+Retype new password: forsooth123
+...output omitted...
+[operator1@servera ~]$
+
+7. Determine a date 180 days in the future. Use the format %F with the date command to get the exact value.
+
+[operator1@servera ~]$ date -d "+180 days" +%F
+2021-12-02
+
+8. Set the account to expire after 180 days by using the command in the preceding step.
+
+[operator1@servera ~]$ sudo chage -E $(date -d "+180 days" +%F) operator1
+[operator1@servera ~]$ sudo chage -l operator1
+
+9. Set PASS_MAX_DAYS to 180 in /etc/login.defs. Use administrative rights when opening the file with the text editor. You can use the sudo vim /etc/login.defs command to perform this step.
+
+[operator1@servera ~]$ sudo vim /etc/login.defs
+...
+# Password aging controls:
+#
+#   PASS_MAX_DAYS   Maximum number of days a password may be used.
+#   PASS_MIN_DAYS   Minimum number of days allowed between password changes.
+#   PASS_MIN_LEN    Minimum acceptable password length.
+#   PASS_WARN_AGE   Number of days warning given before a password expires.
+#
+PASS_MAX_DAYS   180
+PASS_MIN_DAYS   0
+PASS_MIN_LEN    5
+PASS_WARN_AGE   7
+...
+
+H. MANAGING FILE SYSTEM PERMISSIONS FROM THE COMMAND LINE
+
+1. Switch to root using sudo, converting to the root user's shell environment.
+
+[student@servera ~]$ sudo su -
+
+2. Use the mkdir command to create the /home/consultants directory.
+
+[root@servera ~]# mkdir /home/consultants
+
+3. Use the chown command to change the group ownership of the consultants directory to consultants.
+
+[root@servera ~]# chown :consultants /home/consultants
+[root@servera ~]# ls -ld /home/consultants
+
+4. Use the chmod command to add write permission to the consultants group.
+
+[root@servera ~]# chmod g+w /home/consultants
+[root@servera ~]# ls -ld /home/consultants
+
+5. Use the chmod command to forbid others from accessing files in the /home/consultants directory.
+
+[root@servera ~]# chmod 770 /home/consultants
+[root@servera ~]# ls -ld /home/consultants
+
+6. Exit the root shell and switch to the consultant1 user. The password is redhat.
+
+[root@servera ~]# exit
+logout
+[student@servera ~]$
+[student@servera ~]$ su - consultant1
+Password: redhat
+
+7. Navigate to the /home/consultants directory and create a file called consultant1.txt.
+
+[consultant1@servera ~]$ cd /home/consultants
+[consultant1@servera consultants]$ touch consultant1.txt
+[consultant1@servera consultants]$ ls -l consultant1.txt
+
+8. Ensure that all members of the consultants group can edit the consultant1.txt file. Change the group ownership of the consultant1.txt file to consultants.
+
+[consultant1@servera consultants]$ chown :consultants consultant1.txt
+[consultant1@servera consultants]$ ls -l consultant1.txt
+
+9. Exit the shell and switch to the consultant2 user. The password is redhat.
+
+[consultant1@servera consultants]$ exit
+logout
+[student@servera ~]$ su - consultant2
+Password: redhat
+[consultant2@servera ~]$
+
+10. Use the cd command to change to the /home/consultants directory. Use the echo command to add text to the consultant1.txt file.
+
+[consultant2@servera ~]$ cd /home/consultants/
+[consultant2@servera consultants]$ echo "text" >> consultant1.txt
+[consultant2@servera consultants]$
+
+11. Use the cat command to verify that the text was added to the consultant1.txt file.
+
+[consultant2@servera consultants]$ cat consultant1.txt
+text
+[consultant2@servera consultants]$
+
+I. MANAGING DEFAULT PERMISSIONS AND FILE ACCESS
+
+1. Use the su command to switch to the operator1 user.
+
+[student@servera ~]$ su - operator1
+Password: redhat
+[operator1@servera ~]$
+
+2. Use the umask command to list the operator1 user's default umask value.
+
+[operator1@servera ~]$ umask
+
+3. Use the mkdir command to create the /tmp/shared directory. Use the ls -ld command to list the permissions of the new directory.
+
+[operator1@servera ~]$ mkdir /tmp/shared
+[operator1@servera ~]$ ls -ld /tmp/shared
+
+4. Use the touch command to create a file named defaults in the /tmp/shared directory. And use the ls -l command to list the permissions of the new file.
+
+[operator1@servera ~]$ touch /tmp/shared/defaults
+[operator1@servera ~]$ ls -l /tmp/shared/defaults
+
+5. Use the chown command to change the group ownership of the /tmp/shared directory to operators.
+
+[operator1@servera ~]$ sudo su -
+[root@servera ~]# chown :operators /tmp/shared
+[root@servera ~]# ls -ld /tmp/shared
+[root@servera ~]# su - operator1
+[operator1@servera ~]$ 
+
+6. Use the touch command to create a file named group in the /tmp/shared directory. Use the ls -l command to list the file permissions.
+
+[operator1@servera ~]$ touch /tmp/shared/group
+[operator1@servera ~]$ ls -l /tmp/shared/group
+
+7. Use the chmod command to set the group ID to the operators group for the /tmp/shared directory.
+
+[operator1@servera ~]$ chmod g+s /tmp/shared
+
+8. Use the touch command to create a new file named operations_database.txt in the /tmp/shared directory.
+
+[operator1@servera ~]$ touch /tmp/shared/operations_database.txt
+[operator1@servera ~]$ ls -l /tmp/shared/operations_database.txt
+
+9. Use the echo command to create a file called operations_network.txt in the /tmp/shared directory.
+
+[operator1@servera ~]$ echo text >> /tmp/shared/operations_network.txt
+[operator1@servera ~]$ ls -l /tmp/shared/operations_network.txt
+
+10. Use the umask command to change the umask for the operator1 user to 027. Use the umask command to confirm the change.
+
+[operator1@servera ~]$ umask 027
+[operator1@servera ~]$ umask
+
+11. Use the touch command to create a new file named operations_production.txt in the /tmp/shared/ directory. Use the ls -l command to ensure that newly created files are created with read-only access for the operators group and no access for other users.
+
+[operator1@servera ~]$ touch /tmp/shared/operations_production.txt
+[operator1@servera ~]$ ls -l /tmp/shared/operations_production.txt
+
+12. Open a new terminal window and log in to servera as operator1.
+
+[student@servera ~]$ su - operator1
+Password: redhat
+[operator1@servera ~]$
+
+13. List the umask value for operator1.
+
+[operator1@servera ~]$ umask
+
+14. Change the default umask for the operator1 user. The new umask prohibits all access for users not in their group. Confirm that the umask has been changed.
+
+[operator1@servera ~]$ echo "umask 007" >> ~/.bashrc
+[operator1@servera ~]$ cat ~/.bashrc
+
+15. Log out and log in again as the operator1 user. Use the umask command to confirm that the change is permanent.
+
+[operator1@servera ~]$ exit
+[student@servera ~]$ su - operator1
+Password: redhat
+[operator1@servera ~]$ umask
+
+J. CHANGING THE SELINUX ENFORCEMENT MODE
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Change the default SELinux mode to permissive and reboot.
+
+a. Use the getenforce command to verify that servera is in enforcing mode.
+[root@servera ~]# getenforce
+Enforcing
+b. Use the vim command to open the /etc/selinux/config configuration file. Change the SELINUX parameter from enforcing to permissive.
+[root@servera ~]# vim /etc/selinux/config
+c. Use the grep command to confirm that the SELINUX parameter is set to permissive
+[root@servera ~]# grep '^SELINUX' /etc/selinux/config
+SELINUX=permissive
+SELINUXTYPE=targeted
+d. Use the systemctl reboot command to reboot servera.
+[root@servera ~]# systemctl reboot
+
+3. servera takes a few minutes to reboot. After a few minutes, log in to servera as the student user. Use the sudo -i command to become root. Display the current SELinux mode using the getenforce command.
+a. Use the sudo -i command to become root.
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+b. Display the current SELinux mode using the getenforce command.
+[root@servera ~]# getenforce
+Permissive
+
+4. Use the setenforce command to set the current SELinux mode to enforcing without rebooting. Confirm that the mode has been set to enforcing using the getenforce command.
+[root@servera ~]# setenforce 1
+[root@servera ~]# getenforce
+Enforcing
+
+K. CONTROLLING SELINUX FILE CONTEXTS
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Configure Apache to use a document root in a non-standard location.
+
+a. Create the new document root, /custom using the mkdir command
+[root@servera ~]# mkdir /custom
+b. Create the index.html file in the /custom document root using the echo command.
+[root@servera ~]# echo 'This is SERVERA.' > /custom/index.html
+c. Configure Apache to use the new document root location. You need to replace the two occurrences of /var/www/html with /custom in the Apache configuration file, /etc/httpd/conf/httpd.conf.
+[root@servera ~]# vim /etc/httpd/conf/httpd.conf
+[root@servera ~]# grep custom /etc/httpd/conf/httpd.conf
+DocumentRoot "/custom"
+<Directory "/custom">
+
+3. Start and enable the Apache web service and confirm that the service is running.
+a. Start and enable the Apache web service using the systemctl command.
+[root@servera ~]# systemctl enable --now httpd
+b. Use the systemctl command to confirm that the service is running.
+[root@servera ~]# systemctl status httpd
+    ● httpd.service - The Apache HTTP Server
+    Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled;
+    vendor preset: disabled)
+    Active: active (running) since Mon 2019-03-25 19:16:48 CET; 15h ago
+    Docs: man:httpd.service(8)
+    Main PID: 6565 (httpd)
+    Status: "Total requests: 16; Idle/Busy workers 100/0;Requests/sec:
+    0.000285; Bytes served/sec:
+    0 B/sec"
+    Tasks: 213 (limit: 11406)
+    Memory: 37.3M
+    CGroup: /system.slice/httpd.service
+    ├─6565 /usr/sbin/httpd -DFOREGROUND
+    ├─6566 /usr/sbin/httpd -DFOREGROUND
+    ├─6567 /usr/sbin/httpd -DFOREGROUND
+    ├─6568 /usr/sbin/httpd -DFOREGROUND
+    └─6569 /usr/sbin/httpd -DFOREGROUND
+    Mar 25 19:16:48 servera.lab.example.com systemd[1]: Starting The
+    Apache HTTP Server...
+    Mar 25 19:16:48 servera.lab.example.com httpd[6565]: Server
+    configured, listening on: port 80
+4. Try to access http://servera/index.html by using the curl command. You will get an error message that says you do not have permission to access the file.
+[root@servera ~]# curl http://servera/index.html
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /index.html
+on this server.<br />
+</p>
+</body></html>
+
+5. To permit access to the index.html file on servera, SELinux must be configured. Define an SELinux file context rule that sets the context type to httpd_sys_content_t for the /custom directory and all the files below it.
+
+[root@servera ~]# semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
+[root@servera ~]# semanage fcontext -l | grep custom
+
+6. Use the restorecon command to change the file contexts.
+
+[root@servera ~]# restorecon -Rv /custom
+Relabeled /custom from unconfined_u:object_r:default_t:s0 to
+unconfined_u:object_r:httpd_sys_content_t:s0
+Relabeled /custom/index.html from unconfined_u:object_r:default_t:s0 to
+unconfined_u:object_r:httpd_sys_content_t:s0
+
+7. Try to access http://servera/index.html again. You should see the message This is SERVERA. displayed.
+
+[root@servera ~]# curl http://servera/index.html
+This is SERVERA.
+
+L. ADJUSTING SELINUX POLICY WITH BOOLEANS
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. To enable the Apache feature that permits users to publish web content from their home directories, you must edit the /etc/httpd/conf.d/userdir.conf configuration file. Comment out the line that sets UserDir to disabled and uncomment the line that sets UserDir to public_html.
+
+[root@servera ~]# vim /etc/httpd/conf.d/userdir.conf
+#UserDir disabled
+UserDir public_html
+
+3. Use the grep command to confirm the changes.
+
+[root@servera ~]# grep '#UserDir' /etc/httpd/conf.d/userdir.conf
+#UserDir disabled
+[root@servera ~]# grep '^ *UserDir' /etc/httpd/conf.d/userdir.conf
+UserDir public_html
+
+4. Start and enable the Apache web service to make the changes take effect.
+
+[root@servera ~]# systemctl enable --now httpd
+
+5. Back to user student and create some web content that is published from a user's home directory.
+
+a. Back to user student.
+[root@servera ~]# exit
+logout
+[student@servera ~]$
+b. Use the mkdir command to create a directory called ~/public_html.
+[student@servera ~]$ mkdir ~/public_html
+c. Create the index.html file with the following content:
+[student@servera ~]$ echo 'This is student content on SERVERA.' > \
+~/public_html/index.html
+d. Use the chmod command to change the permissions on student's home directory so Apache can access the public_html subdirectory.
+[student@servera ~]$ chmod 711 ~
+
+6. Try to access http://servera/~student/index.html by using the curl command. You will get an error message that says you do not have permission to access the file.
+[student@servera ~]$ curl http://servera/~student/index.html
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /~student/index.html
+on this server.<br />
+</p>
+</body></html>
+
+7. Back to the root user by using the sudo -i command and use the getsebool command to see if there are any booleans that restrict access to home directories.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]# getsebool -a | grep httpd_enable_homedirs
+...output omitted...
+httpd_enable_homedirs --> off
+...output omitted...
+
+8. In the terminal window with root access, use the setsebool command to enable home directory access persistently.
+
+[root@servera ~]# setsebool -P httpd_enable_homedirs on
+[root@servera ~]# getsebool -a | grep httpd_enable_homedirs
+
+9. Try to access http://servera/~student/index.html again. You should see the message: This is student content on SERVERA.
+
+[root@servera ~]# curl http://servera/~student/index.html
+
+M. INVESTIGATING AND RESOLVING SELINUX ISSUES
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Try to access http://servera/index.html by using the curl command. You will get an error message that says you do not have permission to access the file.
+
+[root@servera ~]# curl http://servera/index.html
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access /index.html
+on this server.<br />
+</p>
+</body></html>
+
+3. Using the less command, view the contents of /var/log/messages. Use the / key and search for sealert. Copy the suggested sealert command so that it can be used in the next step. Use the q key to quit the less command.
+
+[root@servera ~]# less /var/log/messages
+...output omitted...
+Mar 28 06:07:03 servera setroubleshoot[15326]: SELinux is preventing /usr/sbin/httpd from getattr access on the file /custom/index.html. For complete SELinux messages run: sealert -l b1c9cc8f-a953-4625-b79b-82c4f4f1fee3
+...output omitted...
+
+4. Run the suggested sealert command. Note the source context, the target objects, the policy, and the enforcing mode.
+
+[root@servera ~]# sealert -l b1c9cc8f-a953-4625-b79b-82c4f4f1fee3
+SELinux is preventing /usr/sbin/httpd from getattr access on the file /custom/index.html.
+
+*****  Plugin catchall (100. confidence) suggests  **************************
+If you believe that httpd should be allowed getattr access on the index.html file by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# ausearch -c 'httpd' --raw | audit2allow -M my-httpd
+# semodule -X 300 -i my-httpd.pp
+
+Additional Information:
+Source Context              system_u:system_r:httpd_t:s0
+Target Context              unconfined_u:object_r:default_t:s0
+Target Objects              /custom/index.html [ file ]
+Source                      httpd
+Source Path                 httpd
+Port                        <Unknown>
+Host                        servera.lab.example.com
+Source RPM Packages     
+Target RPM Packages         
+Policy RPM                  selinux-policy-3.14.1-59.el8.noarch
+Selinux Enabled             True
+Policy Type                 targeted
+Enforcing Mode              Enforcing
+Host Name                   servera.lab.example.com
+                            Platform Linux servera.lab.example.com
+                            4.18.0-67.el8.x86_64 #1 SMP Sat Feb 9 12:44:00 
+                            UTC 2019 x86_64 x86_64
+Alert Count                 166
+First Seen                  2019-03-25 19:25:28 CET
+Last Seen                   2019-03-28 11:07:00 CET
+Local ID                    b1c9cc8f-a953-4625-b79b-82c4f4f1fee3
+
+Raw Audit Messages
+type=AVC msg=audit(1553767620.970:16958): avc:  denied { getattr } for pid=15067 comm="httpd" path="/custom/index.html" dev="vda1" ino=4208311 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+
+Hash: httpd,httpd_t,default_t,file,getattr
+
+5. The Raw Audit Messages section of the sealert command contains information from the /var/log/audit/audit.log. Use the ausearch command to search the /var/log/audit/audit.log file. The -m option searches on the message type. The -ts option searches based on time. This entry identifies the relevant process and file causing the alert. The process is the httpd Apache web server, the file is /custom/index.html, and the context is system_r:httpd_t.
+
+[root@servera ~]# ausearch -m AVC -ts recent
+----
+time->Thu Mar 28 13:39:30 2019
+type=AVC msg=audit(1617438085.476:447): avc:  denied  { getattr } for  pid=6050 comm="httpd" path="/custom/index.html" dev="dm-0" ino=670993 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+
+6. To resolve the issue use the semanage and restorecon commands. The context to manage is httpd_sys_content_t.
+
+[root@servera ~]# semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
+[root@servera ~]# semanage fcontext -l | grep custom
+[root@servera ~]# restorecon -Rv /custom
+Relabeled /custom from unconfined_u:object_r:default_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
+Relabeled /custom/index.html from unconfined_u:object_r:default_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
+
+7. Try to access http://servera/index.html again. You should see the message This is SERVERA. displayed.
+
+[root@servera ~]# curl http://servera/index.html
+This is SERVERA.
+
+N. KILLING PROCESSES
+
+1. see the mkdir command to create a new directory called /home/student/bin.
+
+[student@servera ~]$ mkdir /home/student/bin
+2. Use the vim command to create a script called killing in the /home/student/bin directory. Press the i key to enter Viminteractive mode. Use the :wq command to save the file.
+
+[student@servera ~]$ vim /home/student/bin/killing
+#!/bin/bash
+while true; do
+echo -n "$@ " >> ~/killing_outfile
+sleep 5
+done
+NOTE
+The killing script runs until terminated. It appends command-line arguments to the ~/killing_outfile once every 5 seconds.
+
+3. Use the chmod command to make the killing file executable.
+
+[student@servera ~]$ chmod +x /home/student/bin/killing
+4. Use the cd command to change into the /home/student/bin/ directory. Start three killing processes with the arguments network, interface, and connection, respectively. Start three processes called network, interface, and connection. Use the ampersand (&) to start the processes in the background.
+
+[student@servera ~]$ cd /home/student/bin
+[student@servera bin]$ ./killing network &
+[1] 3460
+[student@servera bin]$ ./killing interface &
+[2] 3482
+[student@servera bin]$ ./killing connection &
+[3] 3516
+Your processes will have different PID numbers.
+
+5. Use the tail command with the -f option to confirm that all three processes are appending to the /home/student/killing_outfile file. Use ctrl+c to stop the tail command.
+
+[student@servera bin]$ tail -f ~/killing_outfile
+network interface network connection interface network connection interface network
+...output omitted...
+6. In the left terminal shell, use the jobs command to list jobs.
+
+7. Use signals to suspend the network process. Confirm that the network process is Stopped. In the right terminal shell, confirm that the network process is no longer appending output to the ~/killing_output.
+
+8. Use the kill with the -SIGSTOP option to stop the network process. Run the jobs to confirm it is stopped.
+
+9. In the right terminal shell, look at the output from the tail command. Confirm that the word network is no longer being appended to the ~/killing_outfile file. Use ctrl+c to stop the tail command.
+
+[student@servera bin]$ rm ~/killing_outfile
+[student@servera bin]$ tail -f ~/killing_outfile
+...output omitted...
+interface connection interface connection interface connection
+interface
+10. In the left terminal shell, terminate the interface process using signals. Confirm that the interface process has disappeared. In the right terminal shell, confirm that interface process output is no longer appended to the ~/killing_outfile file.
+
+11. Use the kill command with the -SIGSTERM option to terminate the interface process. Run the jobs command to confirm that it has been terminated.
+
+
+
+12. In the right terminal shell, look at the output from the tail command. Confirm that the word interface is no longer being appended to the ~/killing_outfile file. Use ctrl+c to stop the tail command.
+
+[student@servera ~]$ rm ~/killing_outfile
+[student@servera ~]$ tail -f ~/killing_outfile
+...output omitted...
+connection connection connection connection connection connection
+connection connection
+13. In the left terminal shell, resume the network process using signals. Confirm that the network process is Running. In the right window, confirm that network process output is being appended to the ~/killing_outfile file.
+
+14. Use the kill command with the -SIGCONT to resume the network process. Run the jobs command to confirm that the process is Running.
+
+
+
+15. In the right terminal shell, look at the output from the tail command. Confirm that the word network is being appended to the ~/killing_outfile file. Use ctrl+c to stop the tail command.
+
+...output omitted...
+[student@servera bin]$ rm ~/killing_outfile
+[student@servera bin]$ tail -f ~/killing_outfile
+network connection network connection network connection network
+connection network connection
+
+O. MONITORING PROCESS ACTIVITY
+
+1. Use the mkdir command to create a new directory called /home/student/bin.
+
+[student@servera ~]$ mkdir /home/student/bin
+
+2. Use the vim command to create a script called monitor in the /home/student/bin directory. Press the i key to enter Vim interactive mode. Use the :wq command to save the file.
+
+[student@servera ~]$ vim /home/student/bin/monitor
+#!/bin/bash
+while true; do
+    var=1
+    while [[ var -lt 50000 ]]; do
+        var=$(($var+1))
+    done
+    sleep 1
+done
+NOTE : The monitor script runs until terminated. It generates artificial CPU load by performing fifty thousand addition problems. It then sleeps for one second, resets the variable, and repeats.
+
+3. Use the chmod command to make the monitor file executable.
+
+[student@servera ~]$ chmod a+x /home/student/bin/monitor
+
+4. In the right terminal shell, run the top utility. Size the window to be as tall as possible.
+
+5. In the left terminal shell use the lscpu command to determine the number of logical CPUs on this virtual machine.
+
+[student@servera ~]$ lscpu
+Architecture:
+CPU op-mode(s):
+Byte Order: x86_64
+32-bit, 64-bit
+Little Endian
+CPU(s): 2
+...output omitted...
+
+6.  In the left terminal shell, run a single instance of the monitor executable. Use the ampersand (&) to run the process in the background.
+
+[student@servera ~]$ /home/student/bin/monitor &
+[1] 6071
+
+7.  In the right terminal shell, observe the top display. Use the single keystrokes l, t, and m to toggle the load, threads, and memory header lines. After observing this behavior, ensure that all headers are displaying.
+
+8. Note the process ID (PID) for monitor. View the CPU percentage for the process, which is expected to hover around 15% to 20%.
+
+[student@servera ~]$ top
+PID USER
+PR NI
+071 student
+20
+0
+...output omitted...
+
+View the load averages. The one minute load average is currently less than a value of 1. The value observed may be affected by resource contention from another virtual machine or the virtual host.
+
+top - 12:23:45 up 11 days, 1:09, 3 users, load average: 0.21, 0.14, 0.05
+
+9. In the left terminal shell, run a second instance of monitor. Use the ampersand (&) to run the process in the background.
+
+[student@servera ~]$ monitor &
+[2] 6498
+
+10. In the right terminal shell, note the process ID (PID) for the second monitor process. View the CPU percentage for the process, also expected to hover between 15% and 20%.
+
+View the one minute load average again, which is still less than 1. It is important to wait for at least one minute to allow the calculation to adjust to the new workload.
+
+top - 12:27:39 up 11 days, 1:13, 3 users, load average: 0.36, 0.25, 0.11
+
+11. In the left terminal shell, run a third instance of monitor. Use the ampersand (&) to run the process in the background.
+
+[student@servera ~]$ monitor &
+[3] 6881
+
+12. In the right terminal shell, note the process ID (PID) for the third monitor process. View the CPU percentage for the process, again expected to hover between 15% and 20%.
+
+To push the load average above 1, you must start more monitor processes. The classroom setup has 2 CPUs so only 3 processes are not enough to stress it. Start three more monitor processes. View the one minute load average again, which now is expected to be above 1. It is important to wait for at least one minute to allow the calculation to adjust to the new workload.
+
+[student@servera ~]$ monitor &
+[4] 10708
+[student@servera ~]$ monitor &
+[5] 11122
+[student@servera ~]$ monitor &
+[6] 11338
+top - 12:42:32 up 11 days, 1:28, 3 users, load average: 1.23, 2.50, 1.54
+
+13. When finished observing the load average values, terminate each of the monitor processes from within top.
+
+14.  In the right terminal shell, press k. Observe the prompt below the headers and above the columns.
+
+...output omitted...
+PID to signal/kill [default pid = 11338]
+
+15. The prompt has chosen the monitor processes at the top of the list. Press Enter to kill the process.
+
+...output omitted...
+Send pid 11338 signal [15/sigterm]
+
+16. Press Enter again to confirm the SIGTERM signal 15. Confirm that the selected process is no longer observed in top. If the PID still remains, repeat these terminating steps, substituting SIGKILL signal 9 when prompted.
+
+P. ADJUSTING TUNING PROFILES
+
+1. Install tuned-adm package.
+
+[student@servera ~]$ sudo yum install tuned
+
+2. Verify that the tuned package is installed, enabled, and started. Use yum to confirm that the tuned package is installed.
+
+[student@servera ~]$ yum list tuned
+...output omitted...
+Installed Packages
+tuned.noarch  2.10.0-15.el8
+@anaconda
+
+3. The systemctl is-enabled tuned; systemctl is-active tuned command displays its enablement and run state.
+
+[student@servera ~]$ systemctl is-enabled tuned; systemctl is-active
+tuned
+enabled
+active
+
+4. List the available tuning profiles and identify the active profile. If sudo prompts for a password, enter student after the prompt.
+
+[student@servera ~]$ sudo tuned-adm list
+[sudo] password for student: student
+Available profiles:
+- balanced
+- desktop
+- latency-performance
+cost of
+- network-latency
+cost of
+- General non-specialized tuned profile
+- Optimize for the desktop use-case
+- Optimize for deterministic performance at the
+increased power consumption
+- Optimize for deterministic performance at the
+increased power consumption, focused on low
+latency
+- network-throughput
+generally
+network performance
+- Optimize for streaming network throughput,
+only necessary on older CPUs or 40G+ networks
+- powersave
+- Optimize for low power consumption
+- throughput-performance - Broadly applicable tuning that provides excellent
+performance across a variety of common server
+workloads
+- virtual-guest
+- Optimize for running inside a virtual guest
+- virtual-host
+- Optimize for running KVM guests
+Current active profile: virtual-guest
+
+5. Change the current active tuning profile to powersave, then confirm the results. If sudo prompts for a password, enter student after the prompt.
+
+6. Change the current active tuning profile.
+
+[student@servera ~]$ sudo tuned-adm profile powersave
+
+7. Confirm that powersave is the active tuning profile.
+
+[student@servera ~]$ sudo tuned-adm active
+Current active profile: powersave
+
+Q. INFLUENCING PROCESS SCHEDULING
+
+1. Use grep to parse the number of existing virtual processors (CPU cores) from the /proc/cpuinfo file.
+
+[student@servera ~]$ grep -c '^processor' /proc/cpuinfo
+2
+
+2. Use a looping command to start multiple instances of the sha1sum /dev/zero & command. Start two per virtual processor found in the previous step. In this example, that would be four instances. The PID values in your output will vary from the example.
+
+[student@servera ~]$ for i in $(seq 1 4); do sha1sum /dev/zero & done
+[1]2643
+[2]2644
+[3]2645
+[4]2646
+
+3. Verify that the background jobs are running for each of the sha1sum processes.
+
+[student@servera ~]$ jobs
+[1] Running sha1sum /dev/zero &
+[2] Running sha1sum /dev/zero &
+[3]- Running sha1sum /dev/zero &
+[4]+ Running sha1sum /dev/zero &
+
+4. Use the ps and pgrep commands to display the percentage of CPU usage for each sha1sum process.
+
+[student@servera ~]$ ps u $(pgrep sha1sum)
+
+5. Use the pkill command to terminate all running processes with the name pattern sha1sum.
+
+[student@servera ~]$ pkill sha1sum
+[2] Terminated sha1sum /dev/zero
+[4]+ Terminated sha1sum /dev/zero
+[1]- Terminated sha1sum /dev/zero
+[3]+ Terminated sha1sum /dev/zero
+
+6. Verify that there are no running jobs.
+
+[student@servera ~]$ jobs
+[student@servera ~]$
+
+7. Use looping to start three instances of sha1sum /dev/zero &.
+
+[student@servera ~]$ for i in $(seq 1 3); do sha1sum /dev/zero & done
+[1] 1947
+[2] 1948
+[3] 1949
+
+8. Use the nice command to start the fourth instance with a 10 nice level.
+
+[student@servera ~]$ nice -n 10 sha1sum /dev/zero &
+[4] 1953
+
+9. Use the ps and pgrep commands to display the PID, percentage of CPU usage, nice value, and executable name for each process. The instance with the nice value of 10 should display a lower percentage of CPU usage than the other instances.
+
+[student@servera ~]$ ps -o pid,pcpu,nice,comm $(pgrep sha1sum)
+PID %CPU NI COMMAND
+1947 66.0 0 sha1sum
+1948 65.7 0 sha1sum
+1949 66.1 0 sha1sum
+1953 6.7 10 sha1sum
+
+10. Use the sudo renice command to lower the nice level of a process from the previous step. Note the PID value from the process instance with the nice level of 10. Use that process PID to lower its nice level to 5.
+
+[student@servera ~]$ sudo renice -n 5 1953
+[sudo] password for student: student
+1953 (process ID) old priority 10, new priority 5
+
+11. Repeat the ps and pgrep commands to redisplay the CPU percent and nice level.
+
+[student@servera ~]$ ps -o pid,pcpu,nice,comm $(pgrep sha1sum)
+PID %CPU NI COMMAND
+1947 63.8  0 sha1sum
+1948 62.8  0 sha1sum
+1949 65.3  0 sha1sum
+1953 9.1   5  sha1sum
+
+R. INSTALLING AND UPDATING SOFTWARE PACKAGES WITH YUM
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Search for a specific package.
+
+Attempt to run the command guile. You should find that it is not installed.
+Use the yum search command to search for packages that have guile as part of their name or summary.
+Use the yum info command to find out more information about the guile package.
+
+3. Use the yum install command to install the guile package.
+
+4. Remove packages.
+
+Use the yum remove command to remove the guile package, but respond with no when prompted. How many packages would be removed?
+Use the yum remove command to remove the gc package, but respond with no when prompted. How many packages would be removed?
+
+5. Gather information about the "RPM Development Tool" component group and install it on servera.
+
+Use the yum group list command to list all available component groups.
+Use the yum group info command to find out more information about the RPM Development Tools component group, including a list of included packages.
+Use the yum group install command to install the RPM Development Tools component group.
+
+6.  Explore the history and undo options of yum.
+
+Use the yum history command to display recent yum history.
+Use the yum history info command to confirm that the last transaction is the group installation.
+Remove the RPM Development Tools group package and use the yum history undo command to remove the set of packages that were installed when the guile package was installed.
+[root@servera ~]# yum group remove -y "RPM Development Tools"
+[root@servera ~]# yum history undo 5
+
+S. MANAGING PACKAGE MODULE STREAMS
+
+1. Use the sudo -i command to switch to the root user. The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. List available modules, streams, and installed modules. Examine the information for the python36 module.
+
+2.1. Use the yum module list command to list available modules and streams.
+[root@servera ~]# yum module list
+2.2. Use the yum module list --installed command to list installed modules and streams.
+2.3. Use the yum module info command to examine details of the python36 module.
+
+3. Install the python36 module from the 3.6 stream and the common profile. Verify the current status of the module. [Screenshot 8.2.5]
+
+3.1. Use the yum module install command to install the python36 module. Use the name:stream/profile syntax to install the python36 module from the 3.6 stream and the common profile.
+3.2. Examine the current status of the python36 module.
+
+4. Switch the postgresql module of the server profile to use the 10 stream. [Screenshot 8.2.6]
+
+4.1. Use the yum module list command to list the postgresql module and the stream. Notice that the postgresql:9.6 module stream is currently installed.
+4.2. Remove and disable the postgresql module stream along with all the packages installed by the profile.
+4.3. Reset the postgresql module and its streams.
+4.4. Use the yum module install command to switch to the postgresql:10 module stream.
+4.5. Verify that the postgresql module is switched to the 10 stream.
+
+5. Remove and disable the postgresql module stream along with all the packages installed by the profile. [Screenshot 8.2.7]
+
+5.1. Use the yum remove module command to remove the postgresql module. The command also removes all packages installed from this module.
+5.2. Disable the postgresql module stream.
+5.3. Verify that the postgresql module stream is removed and disabled.
+
+T. MOUNTING AND UNMOUNTING FILE SYSTEMS
+
+1. A new partition with a file system has been added to the second disk (/dev/vdb) on servera. Mount the newly available partition by UUID at the newly created mount point /mnt/newspace.
+
+lsblk
+parted /dev/vdb mklabel gpt
+parted -a opt /dev/vdb mkpart primary xfs 0% 100%
+mkfs.xfs /dev/vdb1
+
+2. Use the su - command to switch to root, as the root user can only manually mount a device.
+
+[student@servera ~]$ su -
+Password: redhat
+[root@servera ~]#
+
+3. Create the /mnt/newspace directory.
+
+[root@servera ~]# mkdir /mnt/newspace
+
+4. Use the lsblk command with the -fp option to discover the UUID of the device, / dev/vdb1.
+
+[root@servera ~]# lsblk -fp /dev/vdb
+NAME FSTYPE LABEL UUID 
+MOUNTPOINT
+/dev/vdb
+└─/dev/vdb1 xfs  a04c511a-b805-4ec2-981f-42d190fc9a65
+
+5. Mount the file system by using UUID on the /mnt/newspace directory. Replace the UUID with that of the /dev/vdb1 disk from the previous command output.
+
+[root@servera ~]# mount UUID="a04c511a-b805-4ec2-981f-42d190fc9a65" /
+mnt/newspace
+
+6. Verify that the /dev/vdb1 device is mounted on the /mnt/newspace directory
+
+[root@servera ~]# lsblk -fp /dev/vdb
+NAME FSTYPE LABEL UUID
+MOUNTPOINT
+/dev/vdb
+└─/dev/vdb1 xfs       a04c511a-b805-4ec2-981f-42d190fc9a65 /mnt/newspace
+
+7. Change to the /mnt/newspace directory and create a new directory, /mnt/newspace/ newdir, with an empty file, /mnt/newspace/newdir/newfile.
+
+8. Change to the /mnt/newspace directory.
+
+[root@servera ~]# cd /mnt/newspace
+
+9. Create a new directory, /mnt/newspace/newdir.
+
+[root@servera newspace]# mkdir newdir
+
+10. Create a new empty file, /mnt/newspace/newdir/newfile.
+
+[root@servera newspace]# touch newdir/newfile
+[root@servera newspace]# lsblk -fp /dev/vdb
+[root@servera newspace]# ls -lah /mnt/newspace/newdir/newfile
+
+U. ADDING PARTITIONS, FILE SYSTEMS, AND PERSISTENT MOUNTS
+
+1. Use the sudo -i command to switch to the root user. If prompted, use student as the password.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Use parted to create a new disk label of type msdos on the /dev/vdb disk to prepare that new disk for the MBR partitioning scheme.
+
+[root@servera ~]# parted /dev/vdb mklabel msdos
+Information: You may need to update /etc/fstab.
+
+3. Add a new primary partition that is 1 GB in size. For proper alignment, start the partition at the sector 2048. Set the partition file system type to XFS.
+
+4. Use parted interactive mode to help you create the partition.
+
+[root@servera ~]# parted /dev/vdb
+GNU Parted 3.2
+Using /dev/vdb
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) mkpart
+Partition type? primary/extended? primary
+File system type? [ext2]? xfs
+Start? 2048s
+End? 1001MB
+(parted) quit
+Information: You may need to update /etc/fstab.
+Because the partition starts at the sector 2048, the previous command sets the end position to 1001MB to get a partition size of 1000MB (1 GB).
+
+As an alternative, you can perform the same operation with the following noninteractive command: parted /dev/vdb mkpart primary xfs 2048s 1001MB
+
+5. Verify your work by listing the partitions on /dev/vdb.
+
+[root@servera ~]# parted /dev/vdb print
+Model: Virtio Block Device (virtblk)
+Disk /dev/vdb: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+Number  Start End Size Type File system Flags
+1 1049kB 1001MB 1000MB primary
+
+6. Run the udevadm settle command. This command waits for the system to register the new partition and returns when it is done.
+
+[root@servera ~]# udevadm settle
+[root@servera ~]#
+
+7. Format the new partition with the XFS file system.
+
+[root@servera ~]# mkfs.xfs /dev/vdb1
+
+8. Configure the new file system to mount at /archive persistently.
+
+9. Use mkdir to create the /archive directory mount point.
+
+[root@servera ~]# mkdir /archive
+[root@servera ~]#
+
+10. Use the lsblk command with the --fs option to discover the UUID of the /dev/vdb1 device.
+
+[root@servera ~]# lsblk --fs /dev/vdb
+NAME FSTYPE LABEL UUID MOUNTPOINT
+vdb
+└─vdb1 xfs      e3db1abe-6d96-4faa-a213-b96a6f85dcc1
+The UUID in the previous output is probably different on your system.
+
+11. Add an entry to /etc/fstab. In the following command, replace the UUID with the one you discovered from the previous step.
+
+[root@servera ~]# vim /etc/fstab
+...output omitted...
+UUID=e3db1abe-6d96-4faa-a213-b96a6f85dcc1  /archive xfs  defaults
+0 0
+
+12. Update systemd for the system to register the new /etc/fstab configuration.
+
+[root@servera ~]# systemctl daemon-reload
+[root@servera ~]#
+
+13. Execute the mount /archive command to mount the new file system using the new entry added to /etc/fstab.
+
+[root@servera ~]# mount /archive
+[root@servera ~]#
+
+14. Verify that the new file system is mounted at /archive.
+
+[root@servera ~]# mount | grep /archive
+/dev/vdb1 on /archive type xfs
+(rw,relatime,seclabel,attr2,inode64,noquota)
+
+15. Reboot servera. After the server has rebooted, log in and verify that /dev/vdb1 is mounted at /archive. When done, log off from servera.
+
+16. Reboot servera.
+
+[root@servera ~]# systemctl reboot
+Connection to servera closed by remote host.
+Connection to servera closed.
+[student@workstation ~]$
+
+17. Wait a few minutes for servera to reboot and log in as the student user.
+
+[student@workstation ~]$ ssh student@servera
+...output omitted...
+[student@servera ~]$
+
+18. Verify that /dev/vdb1 is mounted at /archive.
+
+[student@servera ~]$ mount | grep /archive
+/dev/vdb1 on /archive type xfs
+(rw,relatime,seclabel,attr2,inode64,noquota)
+
+V. MANAGING SWAP SPACE
+
+1. Use the sudo -i command to switch to the root user. If prompted, use student as the password.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Use the parted command to inspect the /dev/vdb disk.
+
+[root@servera ~]# parted /dev/vdb print
+
+Notice that the disk already has a partition table and uses the GPT partitioning scheme. Also, a 1 GB partition already exists.
+
+3. Add a new partition that is 500 MB in size for use as swap space. Set the partition type to linux-swap.
+
+3.1. Use parted. to create the partition. Because the disk uses the GPT partitioning scheme, you need to give a name to the partition. Call it myswap.
+
+[root@servera ~]# parted /dev/vdb mkpart myswap linux-swap 1001MB 1501MB
+
+Information: You may need to update /etc/fstab.
+Notice in the previous command that the start position, 1001 MB, is the end of the existing first partition. This way parted makes sure that the new partition immediately follows the previous one, without any gap. Because the partition starts at the 1001 MB position, the command sets the end position to 1501 MB to get a partition size of 500 MB.
+
+3.2. Verify your work by listing the partitions on /dev/vdb.
+
+[root@servera ~]# parted /dev/vdb print
+The size of the new partition is not exactly 500 MB. This is because parted has to align the partition with the disk layout.
+
+3.3. Run the udevadm settle command. This command waits for the system to register the new partition and returns when it is done.
+
+[root@servera ~]# udevadm settle
+[root@servera ~]#
+
+4. Initialize the newly created partition as swap space.
+
+[root@servera ~]# mkswap /dev/vdb2
+Setting up swapspace version 1, size = 476 MiB (499118080 bytes)
+no label, UUID=cb7f71ca-ee82-430e-ad4b-7dda12632328
+
+5. Enable the newly created swap space.
+
+5.1. Use the swapon --show command to show that creating and initializing swap space does not yet enable it for use.
+
+[root@servera ~]# swapon --show
+[root@servera ~]#
+5.2. Enable the newly created swap space.
+
+[root@servera ~]# swapon /dev/vdb2
+[root@servera ~]#
+5.3. Verify that the newly created swap space is now available.
+
+[root@servera ~]# swapon --show
+NAME TYPE SIZE USED PRIO
+/dev/vdb2 partition 476M 0B -2
+5.4. Disable the swap space.
+
+[root@servera ~]# swapoff /dev/vdb2
+[root@servera ~]#
+5.5. Confirm that the swap space is disabled.
+
+[root@servera ~]# swapon --show
+[root@servera ~]#
+
+6. Configure the new swap space to be enabled at system boot.
+
+6.1. Use the lsblk command with the --fs option to discover the UUID of the /dev/vdb2 device.
+
+[root@servera ~]# lsblk --fs /dev/vdb2
+NAME FSTYPE LABEL UUID     MOUNTPOINT       
+vdb2 swap           cb7f71ca-ee82-430e-ad4b-7dda12632328
+The UUID in the previous output is probably different on your system.
+6.2. Add an entry to /etc/fstab. In the following command, replace the UUID with the one you discovered from the previous step.
+
+[root@servera ~]# vim /etc/fstab
+...output omitted...
+UUID=cb7f71ca-ee82-430e-ad4b-7dda12632328  swap swap defaults 0
+0
+6.3. Update systemd for the system to register the new /etc/fstab configuration.
+
+[root@servera ~]# systemctl daemon-reload
+[root@servera ~]#
+6.4. Enable the swap space using the entry just added to /etc/fstab.
+
+[root@servera ~]# swapon -a
+[root@servera ~]#
+6.5. Verify that the new swap space is enabled.
+
+[root@servera ~]# swapon --show
+NAME  TYPE   SIZE USED PRIO
+/dev/vdb2 partition 476M 0B -2
+
+7. Reboot servera. After the server has rebooted, log in and verify that the swap space is enabled. When done, log off from server.
+
+7.1. Reboot servera.
+
+[root@servera ~]# systemctl reboot
+Connection to servera closed by remote host.
+Connection to servera closed.
+7.2. Wait a few minutes for servera to reboot and log in as the student user.
+
+[student@servera ~]$
+7.3. Verify that the swap space is enabled.
+
+[root@servera ~]# swapon --show
+NAME  TYPE  SIZE USED PRIO
+/dev/vdb2 partition 476M 0B -2
+
+W. VALIDATING NETWORK CONFIGURATION
+IMPORTANT
+
+Network interface names are determined by their bus type and the detection order of devices during boot. Your network interface names will vary according to the course platform and hardware in use.
+On your system now, locate the interface name (such as ens06 or en1p2) associated with the Ethernet address 52:54:00:00:fa:0a. Use this interface name to replace the enX placeholder used throughout this exercise.
+
+1. Locate the network interface name associated with the Ethernet address 52:54:00:00:fa:0a. Record or remember this name and use it to replace the enX placeholder in subsequent commands.
+
+[student@servera ~]$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group
+default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: ensX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP
+group default qlen 1000
+link/ether 52:54:00:00:fa:0a brd ff:ff:ff:ff:ff:ff
+
+2. Display the current IP address and netmask for all interfaces.
+
+[student@servera ~]$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group
+default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+inet6 ::1/128 scope host
+valid_lft forever preferred_lft forever
+2: ensX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP
+group default qlen 1000
+link/ether 52:54:00:00:fa:0a brd ff:ff:ff:ff:ff:ff
+inet 192.168.0.11/24 brd 192.168.0.255 scope global noprefixroute ensX
+valid_lft forever preferred_lft forever
+inet6 fe80::3059:5462:198:58b2/64 scope link noprefixroute
+valid_lft forever preferred_lft forever
+
+3. Display the statistics for the ensX interface.
+
+[student@servera ~]$ echo "username" ; ip -s link show ensX
+2: ensX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:10:58:3c brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast
+    2874887    50461    0       44016   0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    396192     3205     0       0       0       0
+
+4. Display the routing information.
+
+[student@servera ~]$ ip route
+default via 192.168.0.1 dev enX proto static metric 100
+192.168.0.0/24 dev ensX proto kernel scope link src 192.168.0.11 metric 100
+
+5. Verify that the router is accessible.
+
+[student@servera ~]$ echo "username" ; ping -c3 192.168.0.1
+PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
+64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=0.196 ms
+64 bytes from 192.168.0.1: icmp_seq=2 ttl=64 time=0.436 ms
+64 bytes from 192.168.0.1: icmp_seq=3 ttl=64 time=0.361 ms
+--- 192.168.0.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 49ms
+rtt min/avg/max/mdev = 0.196/0.331/0.436/0.100 ms
+
+6. Display the listening TCP sockets on the local system.
+[student@servera ~]$ ss -lt
+
+X. CONFIGURING NETWORKING FROM THE COMMAND LINE
+
+1. Check all interface
+
+[student@servera ~]$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:26:25:f7 brd ff:ff:ff:ff:ff:ff
+3: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:dd:7a:ee brd ff:ff:ff:ff:ff:ff
+
+2. View network settings using nmcli.
+
+2.1. Show all connections.
+
+[student@servera ~]$ nmcli con show
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+Wired Connection 2  87dab9f8-b0be-4de6-a052-d3645c45efa5  ethernet  enp0s8
+
+2.2. Display only the active connection. Your network interface name should appear under DEVICE, and the name of the connection active for that device is listed on the same line under NAME. This exercise assumes that the active connection is Wired connection 2. If the name of the active connection is different, use that instead of Wired connection 2 for the rest of this exercise.
+
+*Note: The device in this exercise (Wired connection 2) is the host-only interface.
+
+[student@servera ~]$ nmcli con show --active
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+Wired Connection 2  87dab9f8-b0be-4de6-a052-d3645c45efa5  ethernet  enp0s8 
+
+2.3. Display all configuration settings for the active connection.
+
+[root@servera ~]$ sudo nmcli con show 'Wired Connection 2'
+connection.id:                          Wired Connection 2
+connection.uuid:                        87dab9f8-b0be-4de6-a052-d3645c45efa5
+connection.stable-id:                   --
+connection.type:                        802-3-ethernet
+connection.interface-name:              enp0s8
+connection.autoconnect:                 yes
+...output omitted...
+ipv4.method:                            manual
+ipv4.dns:                               --
+ipv4.dns-search:                        --
+ipv4.dns-options:                       --
+ipv4.dns-priority:                      0
+ipv4.addresses:                         10.10.10.11/24
+ipv4.gateway:                           --
+...output omitted...
+GENERAL.NAME:                           Wired Connection 2
+GENERAL.UUID:                           87dab9f8-b0be-4de6-a052-d3645c45efa5
+GENERAL.DEVICES:                        enp0s8
+GENERAL.IP-IFACE:                       enp0s8
+GENERAL.STATE:                          activated
+GENERAL.DEFAULT:                        no
+GENERAL.DEFAULT6:                       no
+GENERAL.SPEC-OBJECT:                    --
+GENERAL.VPN:                            no
+GENERAL.DBUS-PATH:                      /org/freedesktop/NetworkManager/ActiveConnection/2
+GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/Settings/2
+GENERAL.ZONE:                           --
+GENERAL.MASTER-PATH:                    --
+IP4.ADDRESS[1]:                         10.10.10.11/24
+IP4.GATEWAY:                            --
+IP4.ROUTE[1]:                           dst = 10.10.10.0/24, nh = 0.0.0.0, mt = 101
+IP6.ADDRESS[1]:                         fe80::faf7:a2ce:d79b:a42e/64
+IP6.GATEWAY:                            --
+IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 101
+IP6.ROUTE[2]:                           dst = ff00::/8, nh = ::, mt = 256, table=255
+Press q to exit the command.
+
+
+2.4. Show device status.
+
+[root@servera ~]$ sudo nmcli dev status
+DEVICE  TYPE      STATE      CONNECTION
+enp0s3  ethernet  connected  Wired connection 1
+enp0s8  ethernet  connected  Wired Connection 2
+lo      loopback  unmanaged  --
+
+2.5. Display the settings for the enp0s8 device.
+
+[root@servera ~]$ sudo nmcli dev show enp0s8
+GENERAL.DEVICE:                         enp0s8
+GENERAL.TYPE:                           ethernet
+GENERAL.HWADDR:                         08:00:27:DD:7A:EE
+GENERAL.MTU:                            1500
+GENERAL.STATE:                          100 (connected)
+GENERAL.CONNECTION:                     Wired Connection 2
+GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/ActiveConnection/2
+WIRED-PROPERTIES.CARRIER:               on
+IP4.ADDRESS[1]:                         10.10.10.11/24
+IP4.GATEWAY:                            --
+IP4.ROUTE[1]:                           dst = 10.10.10.0/24, nh = 0.0.0.0, mt = 101
+IP6.ADDRESS[1]:                         fe80::faf7:a2ce:d79b:a42e/64
+IP6.GATEWAY:                            --
+IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 101
+IP6.ROUTE[2]:                           dst = ff00::/8, nh = ::, mt = 256, table=255
+
+3. Create a static connection with the same IPv4 address, network prefix, and default gateway. Name the new connection static-addr.
+
+[root@servera ~]$ sudo nmcli con add con-name "static-addr" ifname enp0s8 type ethernet ipv4.method manual ipv4.address
+ 172.25.250.10/24 ipv4.gateway 172.25.250.254
+
+Connection 'static-addr' (4bdd0ad5-e3bb-4b14-8b59-37dcb22d0d64) successfully added.
+
+4. Modify the new connection to add the DNS setting.
+
+[root@servera ~]$ sudo nmcli con mod "static-addr" ipv4.dns 172.25.250.254
+
+5. Display and activate the new connection.
+
+
+5.1. View all connections.
+
+[root@servera ~]$ sudo nmcli con show
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+Wired Connection 2  87dab9f8-b0be-4de6-a052-d3645c45efa5  ethernet  enp0s8
+static-addr         800f4a2a-e594-471c-87b6-c67d948c1c47  ethernet  --
+
+5.2. View the active connection.
+
+[root@servera ~]$ sudo nmcli con show --active
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+Wired Connection 2  87dab9f8-b0be-4de6-a052-d3645c45efa5  ethernet  enp0s8
+
+5.3. Activate the new static-addr connection.
+
+[student@servera ~]$ sudo nmcli con up "static-addr"
+
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
+
+5.4. Verify the new active connection.
+
+[student@servera ~]$ nmcli con show --active
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+static-addr         800f4a2a-e594-471c-87b6-c67d948c1c47  ethernet  enp0s8
+
+6. Configure the original connection so that it does not start at boot, and verify that the static connection is used when the system reboots.
+
+
+6.1. Disable the original connection from autostarting at boot.
+
+[student@servera ~]$ sudo nmcli con mod "Wired Connection 2"  connection.autoconnect no
+
+6.2. Reboot the system.
+
+[student@servera ~]$ sudo systemctl reboot
+Connection to servera closed by remote host.
+Connection to servera closed.
+
+6.3. View the active connection.
+
+[student@servera ~]$ nmcli con show --active
+NAME                UUID                                  TYPE      DEVICE
+Wired connection 1  ad59f4f3-c170-4793-bc32-252d5d64a8d6  ethernet  enp0s3
+static-addr         800f4a2a-e594-471c-87b6-c67d948c1c47  ethernet  enp0s8
+
+7. Test connectivity using the new network addresses.
+
+7.1. Verify the IP address.
+
+[student@servera ~]$ ip addr show enp0s8
+3: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    inet 172.25.250.10/24 brd 172.25.250.255 scope global dynamic noprefixroute enp0s8
+
+7.2. Verify the default gateway.
+
+[student@servera ~]$ ip route
+...output omitted...
+default via 172.25.250.254 dev enp0s8 proto static metric 100
+172.25.250.0/24 dev enp0s8 proto kernel scope link src 172.25.250.10 metric 100
+
+Y. EDITING NETWORK CONFIGURATION FILES
+
+1. Locate network interface names.
+
+IMPORTANT
+
+Network interface names are determined by their bus type and the detection order of devices during boot. Your network interface names will vary according to the course platform and hardware in use. On your system now, locate the interface name (such as ens06 or en1p2) associated with the Ethernet address 52:54:00:00:fa:0a. Use this interface name to replace the enX placeholder used throughout this exercise.
+Locate the network interface name associated with the Ethernet address 52:54:00:00:fa:0a. Record or remember this name and use it to replace the enX placeholder in subsequent commands. The active connection is also named Wired connection 1 (and therefore is managed by the file /etc/sysconfig/network- scripts/ifcfg-Wired_connection_1).
+
+[student@servera ~]$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group
+default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: ensX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP
+group default qlen 1000
+link/ether 52:54:00:00:fa:0a brd ff:ff:ff:ff:ff:ff
+[student@servera ~]$ nmcli con show --active
+NAME UUID TYPE DEVICE
+Wired connection 1 03da038a-3257-4722-a478-53055cc90128 ethernet enX
+[student@servera ~]$ ls /etc/sysconfig/network-scripts/ifcfg-Wired_connection_1
+
+2. Edit the /etc/sysconfig/network-scripts/ifcfg-Wired_connection_1 file on servera to add an additional address of 192.168.0.20/24.
+
+2.1. Append an entry to the file to specify the IPv4 address.
+
+[student@servera ~]$ echo "IPADDR1=192.168.0.20" |  \
+sudo tee -a /etc/sysconfig/network-scripts/ifcfg-Wired_connection_1
+[sudo] password for student: student
+IPADDR1=192.168.0.20
+2.2. Append an entry to the file to specify the network prefix.
+
+[student@servera ~]$ echo "PREFIX1=24" | \
+sudo tee -a /etc/sysconfig/network-scripts/ifcfg-Wired_connection_1
+PREFIX1=24
+
+3. Activate the new address.
+
+3.1. Reload the configuration changes.
+
+[student@servera ~]$ sudo nmcli con reload
+
+3.2. Restart the connection with the new settings.
+
+[student@servera ~]$ sudo nmcli con up "Wired connection 1"
+Connection successfully activated (D-Bus active path: /org/
+freedesktop/NetworkManager/ActiveConnection/3)
+
+3.3. Verify the new IP address.
+
+[student@servera ~]$ ip addr show ensX
+2: ensX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel
+state UP group default qlen 1000
+link/ether 52:54:00:00:fa:0a brd ff:ff:ff:ff:ff:ff
+inet 192.168.0.11/24 brd 192.168.0.255 scope global
+noprefixroute ensX
+valid_lft forever preferred_lft forever
+inet 192.168.0.20/24 brd 192.168.0.255 scope global noprefixroute ensX
+valid_lft forever preferred_lft forever
+inet6 fe80::4bf3:e1d9:3076:f8d7/64 scope link noprefixroute
+valid_lft forever preferred_lft forever
+
+4. Test connectivity using the new network addresses.
+
+4.1. ping the new address of servera.
+
+[student@serverb ~]$ ping -c3 192.168.0.20
+PING 192.168.0.20 (192.168.0.20) 56(84) bytes of data.
+64 bytes from 192.168.0.20: icmp_seq=1 ttl=64 time=0.342 ms
+64 bytes from 192.168.0.20: icmp_seq=2 ttl=64 time=0.188 ms
+64 bytes from 192.168.0.20: icmp_seq=3 ttl=64 time=0.317 ms
+--- 192.168.0.20 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 35ms
+rtt min/avg/max/mdev = 0.188/0.282/0.342/0.068 ms
+
+4.2. use the ssh command to access servera as the student user with the new address.
+
+[student@servera ~]$ ssh student@192.168.0.20 ip addr
+
+Z. CONFIGURING HOST NAMES AND NAME RESOLUTION
+
+1. View the current host name settings.
+
+1.1. Display the current host name.
+
+[student@servera ~]$ hostname
+servera.lab.example.com
+
+1.2. Display the host name status.
+
+[student@servera ~]$ hostnamectl status
+Static hostname:    n/a
+Transient hostname: servera.lab.example.com
+Icon name:          computer-vm
+Chassis:            vm
+Machine ID:         73ab164e278e48be9bf80e80714a8cd5
+Boot ID:            76b13a300c944ab49445af778cb8f749
+Virtualization:     kvm
+Operating System:   Red Hat Enterprise Linux 8.0 (Ootpa)
+CPE OS Name:        cpe:/o:redhat:enterprise_linux:8.0:GA
+Kernel:             Linux 4.18.0-80.el8.x86_64
+Architecture:       x86-64
+
+2. Set a static host name to match the current transient host name.
+
+
+2.1. Change the host name and host name configuration file.
+
+[student@servera ~]$ sudo hostnamectl set-hostname
+servera.lab.example.com
+[sudo] password for student: student
+[student@servera ~]$
+
+2.2. View the configuration file providing the host name at network start.
+
+[student@servera ~]$ cat /etc/hostname
+servera.lab.example.com
+
+2.3. Display the host name status.
+
+3. Temporarily change the host name.
+
+
+3.1. Change the host name.
+
+[student@servera ~]$ sudo hostname testname
+
+3.2. Display the current host name.
+
+[student@servera ~]$ hostname
+testname
+
+3.3. View the configuration file providing the host name at network start.
+
+[student@servera ~]$ cat /etc/hostname
+servera.lab.example.com
+
+4. Add a local nickname for the classroom server.
+
+
+4.1. Modify /etc/hosts so that the additional name of class can be used to access the IP address 192.168.0.254.
+
+[student@servera ~]$ sudo vim /etc/hosts
+[student@servera ~]$ cat /etc/hosts
+127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1 localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.0.254 classroom.example.com classroom class
+...content omitted...
+
+4.2. Look up the IP address of class.
+
+[student@servera ~]$ host class
+Host class not found: 2(SERVFAIL)
+[student@servera ~]$ getent hosts class
+192.168.0.254 classroom.example.com class
+
+4.3. Ping class.
+
+[student@servera ~]$ ping -c3 class
+PING classroom.example.com (192.168.0.254) 56(84) bytes of data.
+64 bytes from classroom.example.com (192.168.0.254): icmp_seq=1
+ttl=64 time=0.397 ms
+64 bytes from classroom.example.com (192.168.0.254): icmp_seq=2
+ttl=64 time=0.447 ms
+64 bytes from classroom.example.com (192.168.0.254): icmp_seq=3
+ttl=64 time=0.470 ms
+--- classroom.example.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.397/0.438/0.470/0.030 ms
+
+AA. REVIEWING SYSLOG FILES
+
+1. Configure rsyslog on servera to log all messages with the debug priority, or higher, for any service into the new /var/log/messages-debug log file by adding the rsyslog configuration file /etc/rsyslog.d/debug.conf.
+
+1.1. Use the sudo -i command to switch to the root user. Specify student as the password for the student user if asked while running the sudo -i command.
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+1.2.Create the /etc/rsyslog.d/debug.conf file with the necessary entries to redirect all log messages having the debug priority to /var/log/messages-debug. You may use the vim /etc/rsyslog.d/debug.conf command to create the file with the following content.
+
+*.debug /var/log/messages-debug
+1.3.Restart the rsyslog service.
+
+[root@servera ~]# systemctl restart rsyslog
+
+2. Verify that all the log messages with the debug priority appears in the /var/log/messages-debug file.
+
+2.1. Use the logger command with the -p option to generate a log message with the user facility and the debug priority.
+[root@servera ~]# logger -p user.debug "Debug Message Test"
+
+2.2. Use the tail command to view the last ten log messages from the /var/log/messages-debug file and confirm that you see the Debug Message Test message among the other log messages.
+
+[root@servera ~]# tail /var/log/messages-debug
+Apr  3 23:24:09 servera systemd[1]: Stopping System Logging Service...
+Apr  3 23:24:09 servera rsyslogd[1006]: [origin software="rsyslogd" swVersion="8.1911.0-3.el8" x-pid="1006" x-info="https://www.rsyslog.com"] exiting on signal 15.
+Apr  3 23:24:09 servera systemd[1]: Stopped System Logging Service.
+Apr  3 23:24:09 servera systemd[1]: Starting System Logging Service...
+Apr  3 23:24:09 servera rsyslogd[21837]: [origin software="rsyslogd" swVersion="8.1911.0-3.el8" x-pid="21837" x-info="https://www.rsyslog.com"] start
+Apr  3 23:24:09 servera systemd[1]: Started System Logging Service.
+Apr  3 23:24:09 servera rsyslogd[21837]: imjournal: journal files changed, reloading...  [v8.1911.0-3.el8 try https://www.rsyslog.com/e/0 ]
+Apr  3 23:29:24 servera student[21842]: Debug Message Test
+
+AB. REVIEWING SYSTEM JOURNAL ENTRIES
+
+1. Use the _PID=1 match with the journalctl command to display only log events originating from the systemd process running with the process identifier of 1 on servera. To quit journalctl, press q.
+
+[student@servera ~]$ journalctl _PID=1
+...output omitted...
+Feb 13 13:21:08 localhost systemd[1]: Found device /dev/disk/by-uuid/cdf61ded-534c-4bd6-b458-cab18b1a72ea.
+Feb 13 13:21:08 localhost systemd[1]: Started dracut initqueue hook.
+Feb 13 13:21:08 localhost systemd[1]: Found device /dev/disk/by-uuid/44330f15-2f9d-4745-ae2e-20844f22762d.
+Feb 13 13:21:08 localhost systemd[1]: Reached target Initrd Root Device.
+lines 1-5/5 (END) q
+[student@servera ~]$
+
+2. Use the _UID=81 match with the journalctl command to display all log events originating from a system service started with the user identifier of 81 on servera. To quit journalctl press q.
+
+[student@servera ~]$ journalctl _UID=81
+...output omitted...
+Feb 22 01:29:09 servera.lab.example.com dbus-daemon[672]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher'>
+Feb 22 01:29:09 servera.lab.example.com dbus-daemon[672]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+lines 1-5/5 (END) q
+[student@servera ~]$
+
+3. Use the -p warning option with the journalctl command to display log events with priority warning and above on servera. To quit journalctl press q.
+
+[student@servera ~]$ journalctl -p warning
+...output omitted...
+Feb 13 13:21:07 localhost kernel: Detected CPU family 6 model 13 stepping 3
+Feb 13 13:21:07 localhost kernel: Warning: Intel Processor - this hardware
+  has not undergone testing by Red Hat and might not >
+Feb 13 13:21:07 localhost kernel: acpi PNP0A03:00: fail to add MMCONFIG
+  information, can't access extended PCI configuration s>
+Feb 13 13:21:07 localhost rpc.statd[288]: Running as root. chown /var/lib/
+  nfs/statd to choose different user
+Feb 13 13:21:07 localhost rpc.idmapd[293]: Setting log level to 0
+...output omitted...
+Feb 13 13:21:13 servera.lab.example.com rsyslogd[1172]: environment variable
+  TZ is not set, auto correcting this to TZ=/etc/lo>
+Feb 13 14:51:42 servera.lab.example.com systemd[1]: cgroup compatibility
+  translation between legacy and unified hierarchy sett>
+Feb 13 17:15:37 servera.lab.example.com rsyslogd[25176]: environment
+  variable TZ is not set, auto correcting this to TZ=/etc/l>
+Feb 13 18:22:38 servera.lab.example.com rsyslogd[25410]: environment
+  variable TZ is not set, auto correcting this to TZ=/etc/l>
+Feb 13 18:47:55 servera.lab.example.com rsyslogd[25731]: environment
+  variable TZ is not set, auto correcting this to TZ=/etc/l>
+lines 1-17/17 (END) q
+
+4. Display all log events recorded in the past 10 minutes from the current time on servera.
+
+4.1. Use the --since option with the journalctl command to display all log events recorded in the past 10 minutes on servera. To quit journalctl press q.
+[student@servera ~]$ journalctl --since "-10min"
+...output omitted...
+Feb 13 22:31:01 servera.lab.example.com CROND[25890]: (root) CMD (run-parts /etc/cron.hourly)
+Feb 13 22:31:01 servera.lab.example.com run-parts[25893]: (/etc/cron.hourly) starting 0anacron
+Feb 13 22:31:01 servera.lab.example.com run-parts[25899]: (/etc/cron.hourly) finished 0anacron
+Feb 13 22:31:41 servera.lab.example.com sshd[25901]: Bad protocol version identification 'brain' from 172.25.250.254 port 37450
+Feb 13 22:31:42 servera.lab.example.com sshd[25902]: Accepted publickey for root from 172.25.250.254 port 37452 ssh2: RSA SHA2>
+Feb 13 22:31:42 servera.lab.example.com systemd[1]: Started /run/user/0 mount wrapper.
+Feb 13 22:31:42 servera.lab.example.com systemd[1]: Created slice User Slice of UID 0.
+Feb 13 22:31:42 servera.lab.example.com systemd[1]: Starting User Manager for UID 0.
+Feb 13 22:31:42 servera.lab.example.com systemd[1]: Started Session 118 of user root.
+Feb 13 22:31:42 servera.lab.example.com systemd-logind[712]: New session 118 of user root.
+Feb 13 22:31:42 servera.lab.example.com systemd[25906]: pam_unix(systemd-user:session): session opened for user root by (uid=0)
+...output omitted...
+lines 1-32/84 39% q
+
+5. Use the --since option and the _SYSTEMD_UNIT="sshd.service" match with the journalctl command to display all the log events originating from the sshd service recorded since 09:00:00 this morning on servera. To quit journalctl press q.
+
+[student@servera ~]$ journalctl --since 9:00:00 _SYSTEMD_UNIT="sshd.service"
+...output omitted...
+Feb 13 13:21:12 servera.lab.example.com sshd[727]: Server listening on 0.0.0.0 port 22.
+Feb 13 13:21:12 servera.lab.example.com sshd[727]: Server listening on :: port 22.
+Feb 13 13:22:07 servera.lab.example.com sshd[1238]: Accepted publickey for student from 172.25.250.250 port 50590 ssh2: RSA SH>
+Feb 13 13:22:07 servera.lab.example.com sshd[1238]: pam_unix(sshd:session): session opened for user student by (uid=0)
+Feb 13 13:22:08 servera.lab.example.com sshd[1238]: pam_unix(sshd:session): session closed for user student
+Feb 13 13:25:47 servera.lab.example.com sshd[1289]: Accepted publickey for root from 172.25.250.254 port 37194 ssh2: RSA SHA25>
+Feb 13 13:25:47 servera.lab.example.com sshd[1289]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Feb 13 13:25:47 servera.lab.example.com sshd[1289]: pam_unix(sshd:session): session closed for user root
+Feb 13 13:25:48 servera.lab.example.com sshd[1316]: Accepted publickey for root from 172.25.250.254 port 37196 ssh2: RSA SHA25>
+Feb 13 13:25:48 servera.lab.example.com sshd[1316]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Feb 13 13:25:48 servera.lab.example.com sshd[1316]: pam_unix(sshd:session): session closed for user root
+Feb 13 13:26:07 servera.lab.example.com sshd[1355]: Accepted publickey for student from 172.25.250.254 port 37198 ssh2: RSA SH>
+Feb 13 13:26:07 servera.lab.example.com sshd[1355]: pam_unix(sshd:session): session opened for user student by (uid=0)
+Feb 13 13:52:28 servera.lab.example.com sshd[1473]: Accepted publickey for root from 172.25.250.254 port 37218 ssh2: RSA SHA25>
+Feb 13 13:52:28 servera.lab.example.com sshd[1473]: pam_unix(sshd:session): session opened for user root by (uid=0)
+...output omitted...
+lines 1-32 q
+
+AC. PRESERVING THE SYSTEM JOURNAL
+
+1. As the superuser, confirm that the /var/log/journal directory does not exist. Use the ls command to list the /var/log/journal directory contents. Use sudo to elevate the student user privileges. Use student as the password if asked.
+
+[student@servera ~]$ sudo ls /var/log/journal
+[sudo] password for student: student
+ls: cannot access '/var/log/journal': No such file or directory
+Since the /var/log/journal directory does not exist, systemd-journald service is not preserving its journals.
+
+2. Configure the systemd-journald service on servera to preserve journals across a reboot.
+
+2.1. Uncomment the Storage=auto line in the /etc/systemd/journald.conf file and set Storage to persistent. You may use the sudo vim /etc/systemd/journald.conf command to edit the configuration file. Type /Storage=auto from vim command mode to search for the Storage=auto line.
+...output omitted...
+[Journal]
+Storage=persistent
+...output omitted...
+2.2. Use the systemctl command to restart the systemd-journald service to bring the configuration changes into effect.
+
+[student@servera ~]$ sudo systemctl restart systemd-journald.service
+
+3. Confirm that the systemd-journald service on servera preserves its journals such that the journals persist across reboots.
+3.1. Use the systemctl reboot command to restart servera.
+[student@servera ~]$ sudo systemctl reboot
+Connection to servera closed by remote host.
+Connection to servera closed.
+Notice that the SSH connection was terminated as soon as you restarted the servera system.
+
+3.2. Open an SSH session to servera again.
+
+[student@servera ~]$
+3.3. Use the ls command to confirm that the /var/log/journal directory exists. The /var/log/journal directory contains a subdirectory with a long hexadecimal name. The journal files are found in that directory. The subdirectory name on your system will be different.
+
+[student@servera ~]$ sudo ls /var/log/journal
+[sudo] password for student: student
+73ab164e278e48be9bf80e80714a8cd5
+[student@servera ~]$ sudo ls /var/log/journal/73ab164e278e48be9bf80e80714a8cd5
+system.journal
+user-1000.journal
+
+AD. CREATING LOGICAL VOLUMES
+
+1. Use the sudo -i command to switch to the root user.
+The password for the student user is student.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Create the physical resources.
+
+2.1. Use parted to create two 256 MiB partitions and set them to type Linux LVM.
+
+[root@servera ~]# parted -s /dev/vdb mklabel gpt
+[root@servera ~]# parted -s /dev/vdb mkpart primary 1MiB 257MiB
+[root@servera ~]# parted -s /dev/vdb set 1 lvm on
+[root@servera ~]# parted -s /dev/vdb mkpart primary 258MiB 514MiB
+[root@servera ~]# parted -s /dev/vdb set 2 lvm on
+
+2.2. Use udevadm settle for the system to register the new partitions.
+
+[root@servera ~]# udevadm settle
+
+3. Use pvcreate to add the two new partitions as PVs.
+
+[root@servera ~]# pvcreate /dev/vdb1 /dev/vdb2
+    Physical volume "/dev/vdb1" successfully created.
+    Physical volume "/dev/vdb2" successfully created.
+
+4. Use vgcreate to create a new VG named servera_01_vg built from the two PVs.
+
+[root@servera ~]# vgcreate servera_01_vg /dev/vdb1 /dev/vdb2
+Volume group "servera_01_vg" successfully created
+
+5. Use lvcreate to create a 400 MiB LV named servera_01_lv from the servera_01_vg VG.
+
+[root@servera ~]# lvcreate -n servera_01_lv -L 400M servera_01_vg
+Logical volume "servera_01_lv" created.
+This creates a device named /dev/servera_01_vg/servera_01_lv but without a file system on it.
+
+6. Add a persistent file system.
+
+6.1. Add an XFS file system on the servera_01_lv LV with the mkfs command.
+
+[root@servera ~]# mkfs -t xfs /dev/servera_01_vg/servera_01_lv
+...output omitted...
+6.2. Create a mount point at /data.
+
+[root@servera ~]# mkdir /data
+6.3. Add the following line to the end of /etc/fstab on servera:
+
+/dev/servera_01_vg/servera_01_lv    /data   xfs defaults    1 2
+6.4. Use systemctl daemon-reload to update systemd with the new /etc/fstab configuration.
+
+[root@servera ~]# systemctl daemon-reload
+6.5. Verify the /etc/fstab entry and mount the new servera_01_lv LV device with the mount command.
+
+[root@servera ~]# mount /data
+
+7. Test and review your work.
+
+7.1. As a final test, copy some files to /data and verify how many were copied.
+
+[root@servera ~]# cp -a /etc/*.conf /data
+[root@servera ~]# ls /data | wc -l
+34
+You will verify that you still have the same number of files in the next guided exercise.
+
+7.2. parted /dev/vdb print lists the partitions that exist on /dev/vdb.
+
+[root@servera ~]# parted /dev/vdb print
+Model: Virtio Block Device (virtblk)
+Disk /dev/vdb: 5369MB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags:
+Number  Start   End Size File system Name    Flags
+1   1049kB      269MB   268MB               primary lvm
+2   271MB       539MB   268MB               primary lvm
+Notice the Number column, which contains the values 1 and 2. These correspond to /dev/vdb1 and /dev/vdb2, respectively. Also notice the Flags column, which indicates the partition type.
+
+7.3. pvdisplay displays information about each of the physical volumes. Optionally, include the device name to limit details to a specific PV.
+
+[root@servera ~]# pvdisplay /dev/vdb2
+--- Physical volume ---
+PV Name     /dev/vdb2
+VG Name     servera_01_vg
+PV Size     256.00 MiB / not usable 4.00 MiB
+Allocatable yes
+PE Size     4.00 MiB
+Total PE     63         
+Free PE     26
+Allocated PE 37
+PV UUID  2z0Cf3-99YI-w9ny-alEW-wWhL-S8RJ-M2rfZk 
+This shows that the PV is allocated to VG servera_01_vg, is 256 MiB in size (although 4 MiB is not usable), and the physical extent size (PE Size) is 4 MiB (the smallest allocatable LV size).
+
+There are 63 PEs, of which 26 are free for allocation to LVs in the future and 37 are currently allocated to LVs. These translate to MiB values as follows:
+
+• Total 252 MiB (63 PEs x 4 MiB); remember, 4 MiB is unusable.
+• Free 104 MiB (26 PEs x 4 MiB)
+• Allocated 148 MiB (37 PEs x 4 MiB)
+
+7.4. vgdisplay vgname shows information about the volume group named vgname.
+
+[root@servera ~]# vgdisplay servera_01_vg
+Verify the following values: • VG Size is 504.00MiB. • Total PE is 126. • Alloc PE / Size is 100 / 400.00MiB. • Free PE / Size is 26 / 104.00MiB.
+
+7.5. lvdisplay /dev/vgname/lvname displays information about the logical volume named lvname.
+
+[root@servera ~]# lvdisplay /dev/servera_01_vg/servera_01_lv
+Review the LV Path, LV Name, VG Name, LV Status, LV Size, and Current LE (logical extents, which map to physical extents).
+
+7.6. The mount command shows all mounted devices and any mount options. It should include /dev/servera_01_vg/servera_01_lv.
+
+NOTE
+Many tools report the device mapper name instead, /dev/mapper servera_01_vg-servera_01_lv; it is the same logical volume.
+
+[root@servera ~]# mount
+You should see (probably on the last line) /dev/mapper/servera_01_vg- servera_01_lv mounted on /data and the associated mount information.
+
+7.7. df -h displays human-readable disk free space. Optionally, include the mount point to limit details to that file system. [Screenshot 13.1.7]
+
+[root@servera ~]# df -h /data
+Filesystem                                      Size    Used    Avail   Use%    Mounted on 
+/dev/mapper/servera_01_vg-servera_01_lv     395M    24M 372M    6%  /data
+Allowing for file-system metadata, these values are expected.
+
+AE. EXTENDING LOGICAL VOLUMES
+
+1. Use the sudo -i command to switch to root at the shell prompt.
+
+[student@servera ~]$ sudo -i
+[sudo] password for student: student
+[root@servera ~]#
+
+2. Use parted to create 400 MiB partitions and set them to type Linux LVM.
+
+[root@servera ~]# parted -s /dev/vdb mklabel gpt
+[root@servera ~]# parted -s /dev/vdb mkpart primary 1MiB 405MiB
+[root@servera ~]# parted -s /dev/vdb set 1 lvm on
+
+3. Use udevadm settle for the system to register the new partitions.
+
+[root@servera ~]# udevadm settle
+
+4. Use pvcreate to add the two new partitions as PVs and Use vgcreate to create a new VG named servera_01_vg built from /dev/vdb1.
+
+[root@servera ~]# vgcreate servera_01_vg /dev/vdb1
+Volume group "servera_01_vg" successfully created
+
+5. Use lvcreate to create a 400 MiB LV named servera_01_lv from the servera_01_vg VG.
+
+[root@servera ~]# lvcreate -n servera_01_lv -L 400M servera_01_vg
+Logical volume "servera_01_lv" created.
+This creates a device named /dev/servera_01_vg/servera_01_lv but without a file system on it.
+
+6. Add an XFS file system on the servera_01_lv LV with the mkfs command and mount to /data.
+
+[root@servera ~]# mkfs -t xfs /dev/servera_01_vg/servera_01_lv
+[root@servera ~]# mkdir /data
+[root@servera ~]# mount /dev/servera_01_vg/servera_01_lv /data
+[root@servera ~]# cp -a /etc/*.conf /data
+
+7. Use vgdisplay to show volume group detail
+
+[root@servera ~]# vgdisplay servera_01_vg
+[root@servera ~]# df -h /data
+
+8. Use parted to create an additional partition of 400 MiB and set it to type Linux LVM.
+
+[root@servera ~]# parted -s /dev/vdb mkpart primary 406MiB 810MiB
+[root@servera ~]# parted -s /dev/vdb set 2 lvm on
+
+9. Use udevadm settle for the system to register the new partition.
+
+[root@servera ~]# udevadm settle
+
+10. Use pvcreate to add the new partition as a PV.
+
+[root@servera ~]# pvcreate /dev/vdb2
+Physical volume "/dev/vdb2" successfully created.
+
+11. Extend the volume group. Use vgextend to extend the VG named servera_01_vg, using the new /dev/ vdb3 PV.
+
+[root@servera ~]# vgextend servera_01_vg /dev/vdb2
+Volume group "servera_01_vg" successfully extended
+
+12. Use vgdisplay to inspect the servera_01_vg VG free space again. There should be plenty of free space now. ****
+
+[root@servera ~]# vgdisplay servera_01_vg
+[root@servera ~]# df -h /data
+
+13. Use lvextend to extend the existing LV to 700 MiB.
+
+[root@servera ~]# lvextend -L 700M /dev/servera_01_vg/servera_01_lv
+NOTE
+The example specifies the exact size to make the final LV, but you could have specified the amount of additional space desired:
+• -L +100M to add the new space using size in MiB.
+• -l 175 to specify the total number of extents (175 PEs x 4 MiB).
+• -l +25 to add the additional extents needed.
+
+14. Use xfs_growfs to extend the XFS file system to the remainder of the free space on the LV.
+
+[root@servera ~]# xfs_growfs /data
+meta-data=/dev/mapper/servera_01_vg-servera_01_lv isize=512
+agsize=25600 blks
+...output omitted...
+
+15. Use df and ls | wc to review the new file-system size and verify that the previously existing files are still present.
+
+[root@servera ~]# df -h /data
+[root@servera ~]# ls /data | wc -l
+
+AF. SCHEDULING RECURRING SYSTEM JOBS
+
+1. Use the sudo -i command to switch to the root user's account.
+
+[student@servera ~]$ sudo -i 
+[sudo] password for student: student 
+[root@servera ~]# 
+
+2. Schedule a recurring system job that generates a log message indicating the number of currently active users in the system. The job must run daily. You can use the w -h | wc -l command to retrieve the number of currently active users in the system. Also, use the logger command to generate the log message.
+
+Create a script file called /etc/cron.daily/usercount with the following content. You can use the vi /etc/cron.daily/usercount command to create the script file.
+#!/bin/bash
+USERCOUNT=$(w -h | wc -l)
+logger "There are currently ${USERCOUNT} active users"
+Use the chmod command to enable the execute (x) permission on /etc/cron.daily/usercount.
+[root@servera ~]# chmod +x /etc/cron.daily/usercount
+
+3. The sysstat package provides the systemd units called sysstat-collect.timer and sysstat-collect.service. The timer unit triggers the service unit every 10 minutes to collect system activity data using the shell script called /usr/lib64/sa/sa1. Make sure that the sysstat package is installed and change the timer unit configuration file to collect the system activity data every two minutes.
+
+a. Use the yum command to install the sysstat package.
+[root@servera ~]# yum install sysstat
+b. Copy /usr/lib/systemd/system/sysstat-collect.timer to /etc/ systemd/system/sysstat-collect.timer.
+[root@servera ~]# cp /usr/lib/systemd/system/sysstat-collect.timer \
+/etc/systemd/system/sysstat-collect.timer
+
+IMPORTANT You should not edit files under the /usr/lib/systemd directory. 
+With systemd, you can copy the unit file to the /etc/systemd/system directory and edit that copy. 
+The systemd process parses your customized copy instead of the file under the /usr/lib/systemd directory.
+
+c. Edit /etc/systemd/system/sysstat-collect.timer so that the timer unit runs every two minutes. Also, replace any occurrence of the string 10 minutes with 2 minutes throughout the unit configuration file including the ones in the commented lines. You may use the vi /etc/systemd/system/sysstat- collect.timer command to edit the configuration file.
+# /usr/lib/systemd/system/sysstat-collect.timer
+# (C) 2014 Tomasz Torcz <tomek@pipebreaker.pl>
+#
+# sysstat-11.7.3 systemd unit file:
+#        Activates activity collector every 2 minutes
+
+[Unit]
+Description=Run system activity accounting tool every 2 minutes
+
+[Timer]
+OnCalendar=*:00/02
+
+[Install]
+WantedBy=sysstat.service
+The preceding changes cause the sysstat-collect.timer unit to trigger sysstat-collect.service unit every two minutes, which runs /usr/lib64/sa/sa1 1 1. Running /usr/lib64/sa/sa1 1 1 collects the system activity data in a binary file under the /var/log/sa directory.
+
+d. Use the systemctl daemon-reload command to make sure that systemd is aware of the changes.
+[root@servera ~]# systemctl daemon-reload
+e. Use the systemctl command to activate the sysstat-collect.timer timer unit.
+[root@servera ~]# systemctl enable --now sysstat-collect.timer
+f. Use the while command to wait until the binary file gets created under the /var/log/sa directory. Wait for your shell prompt to return.
+[root@servera ~]# while [ $(ls /var/log/sa | wc -l) -eq 0 ]; do sleep 1s; done
+In the while command above, the ls /var/log/sa | wc -l returns a 0 if the file does not exist and a 1 if it does exist. The while determines if this equals 0 and if so, enters the loop, which pauses for one second. When the file exists, the while loop exits.
+
+g. Use the ls -l command to verify that the binary file under the /var/log/sa directory got modified within last two minutes.
+[root@servera ~]# ls -l /var/log/sa
+[root@servera ~]# date
+The output of the preceding commands may vary on your system.
+
+AG. MANAGING TEMPORARY FILES
+
+1. Configure systemd-tmpfiles to clean the /tmp directory so that it does not contain files that that have not been used in the last five days. Ensure that the configuration does not get overwritten by any package update.
+
+a. Use the sudo -i command to switch to the root user.
+[student@servera ~]$ sudo -i 
+[sudo] password for student: student 
+[root@servera ~]#
+b. Copy /usr/lib/tmpfiles.d/tmp.conf to /etc/tmpfiles.d/tmp.conf.
+ [root@servera ~]# cp /usr/lib/tmpfiles.d/tmp.conf /etc/tmpfiles.d/tmp.conf 
+c. Search for the configuration line in /etc/tmpfiles.d/tmp.conf that applies to the /tmp directory. Replace the existing age of the temporary files in that configuration line with the new age of 5 days. Remove all the other lines from the file including the commented ones. You can use the vim /etc/tmpfiles.d/tmp.conf command to edit the configuration file. The /etc/tmpfiles.d/tmp.conf file should appear as follows:
+q /tmp 1777 root root 5d
+The preceding configuration causes systemd-tmpfiles to ensure that the directory /tmp exists with the octal permissions set to 1777. Both the owning user and group of /tmp must be root. The /tmp directory must be free from the temporary files which are unused in the last five days.
+d. Use the systemd-tmpfiles --clean command to verify that the /etc/ tmpfiles.d/tmp.conf file contains the correct configuration.
+[root@servera ~]# systemd-tmpfiles --clean /etc/tmpfiles.d/tmp.conf
+Because the preceding command did not return any errors, it confirms that the configuration settings are correct.
+
+2. Add a new configuration that ensures that the /run/momentary directory exists with user and group ownership set to root. The octal permissions for the directory must be 0700. The configuration should purge any file in this directory that remains unused in the last 30 seconds.
+
+a. Create the file called /etc/tmpfiles.d/momentary.conf with the following content. You can use the vim /etc/tmpfiles.d/momentary.conf command to create the configuration file.
+ q /run/momentary 0700 root root 30s
+The preceding configuration causes systemd-tmpfiles to ensure that the /run/ momentary directory exists with its octal permissions set to 0700. The user and group ownership of /run/momentary must be root. Any file in this directory that remains unused in the last 30 seconds must be purged.
+b. Use the systemd-tmpfiles --create command to verify that the /etc/tmpfiles.d/momentary.conf file contains the appropriate configuration. The command creates the /run/momentary directory if it does not exist.
+[root@servera ~]# systemd-tmpfiles --create /etc/tmpfiles.d/momentary.conf 
+Because the preceding command did not return any errors, it confirms that the configuration settings are correct.
+c. Use the ls command to verify that the /run/momentary directory is created with the appropriate permissions, owner, and group owner.
+[root@servera ~]# ls -ld /run/momentary
+Notice that the octal permission set of /run/momentary is 0700 and that the user and group ownership are set to root.
+
+3. Verify that any file under the /run/momentary directory, unused in the last 30 seconds, is removed, based on the systemd-tmpfiles configuration for the directory.
+
+a. Use the touch command to create a file called /run/momentary/testfile.
+ [root@servera ~]# touch /run/momentary/testfile
+b. Use the sleep command to configure your shell prompt not to return for 30 seconds.
+ [root@servera ~]# sleep 30
+c. After your shell prompt returns, use the systemd-tmpfiles --clean command to clean stale files from /run/momentary, based on the rule mentioned in /etc/tmpfiles.d/momentary.conf.
+[root@servera ~]# systemd-tmpfiles --clean /etc/tmpfiles.d/momentary.conf 
+The preceding command removes /run/momentary/testfile because the file remained unused for 30 seconds and should have been removed based on the rule mentioned in /etc/tmpfiles.d/momentary.conf.
+d. Use the ls -l command to verify that the /run/momentary/testfile file does not exist.
+[root@servera ~]# ls -l /run/momentary/testfile 
+ls: cannot access '/run/momentary/testfile': No such file or directory
